@@ -1,8 +1,14 @@
+import { Route, Routes } from "react-router";
+import LandingPage from "./pages/LandingPage";
+import NotFound from "./pages/NotFound";
+
 function App() {
   return (
     <>
-      <h1 className="text-sm font-bold underline">Hello world!</h1>
-      <button className="btn btn-primary">Button</button>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
     </>
   );
 }
