@@ -1,11 +1,16 @@
+import Header from "../components/landingpage/Header";
 import HeroSection from "../components/landingpage/HeroSection";
-import Navbar from "../components/landingpage/Navbar";
+import WorkShowcase from "../components/landingpage/WorkShowcase";
+import { styles } from "../styles/styles";
 
 function LandingPage() {
   return (
     <div>
-      <Navbar />
-      <HeroSection />
+      <Header />
+      <div className={`${styles.maxWidth}`}>
+        <HeroSection />
+        <WorkShowcase />
+      </div>
     </div>
   );
 }
