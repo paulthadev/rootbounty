@@ -1,6 +1,7 @@
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import farm from "../../assets/farm.png";
 import { styles } from "../../styles/styles";
+import { showcases, showH1 } from "../../constants/landing";
 
 function WorkShowcase() {
   return (
@@ -11,51 +12,25 @@ function WorkShowcase() {
         <LazyLoadImage src={farm} className="w-2/3 self-center" />
 
         <div className="">
-          <div>
-            <h1>Our Solution</h1>
-            <p>
-              At RootBounty, we are dedicated to connecting farmers and buyers
-              in the tuber crop industry through a seamless, user-friendly
-              platform. Here&apos;s what we offer:
-            </p>
-          </div>
-
-          <div>
-            <h2>For Farmers</h2>
-
-            <div>
-              <h3>Sell Your Crops</h3>
-              <p>
-                List your fresh tuber crops, including yams, cassava, sweet
-                potatoes, and more, for buyers to discover and purchase
-                directly.
-              </p>
+          {showH1.map((item) => (
+            <div key={item.id}>
+              <h1>{item.heading}</h1>
+              <p>{item.text}</p>
             </div>
+          ))}
 
-            <div>
-              <h3>Market Expansion</h3>
-              <p>
-                Access a broader market of local and international buyers,
-                helping you grow your farm business.
-              </p>
-            </div>
+          {showcases.map((items) => (
+            <div key={items.id}>
+              <h2>{items.heading}</h2>
 
-            <div>
-              <h3>Sales Management</h3>
-              <p>
-                Easily manage your product listings, orders, and payments
-                through a streamlined dashboard.
-              </p>
+              {items.details.map((detail) => (
+                <div key={detail.id}>
+                  <h3>{detail.title}</h3>
+                  <p>{detail.subTitle}</p>
+                </div>
+              ))}
             </div>
-
-            <div>
-              <h3>Secure Transactions</h3>
-              <p>
-                We ensure safe and reliable transactions, so you can focus on
-                your crops while we handle the financials
-              </p>
-            </div>
-          </div>
+          ))}
         </div>
       </div>
     </section>
