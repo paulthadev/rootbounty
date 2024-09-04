@@ -9,13 +9,13 @@ body {
 
 /* Hide ScrollBar */
 .scrollbar-hide {
-    -ms-overflow-style: none;
+    -ms-overflow-style: none !important;
     /* IE and Edge */
-    scrollbar-width: none;
+    scrollbar-width: none !important;
     /* Firefox */
 }
 
 .scrollbar-hide::-webkit-scrollbar {
-    display: none;
+    display: none !important;
     /* Chrome, Safari and Opera */
 }
