@@ -4,7 +4,7 @@ import { heroSectionInfo } from "../../constants/landing";
 import { styles } from "../../styles/styles";
 
 const HeroSection = () => (
-  <section className="h-fit flex scrollbar-hide flex-col">
+  <section className="h-fit flex flex-col scrollbar-hide">
     <div className="relative">
       <div className="absolute inset-0 top-0 bg-black opacity-80 "></div>
       <LazyLoadImage
@@ -23,7 +23,7 @@ const HeroSection = () => (
 
 function MainHeading() {
   return (
-    <div className="max-w-[15rem]  xs:max-w-[20rem] md:max-w-[25rem]  lg:max-w-[30rem] grid gap-y-8 lg:gap-y-10">
+    <div className="max-w-[15rem] scrollbar-hide  xs:max-w-[20rem] md:max-w-[25rem]  lg:max-w-[30rem] grid gap-y-8 lg:gap-y-10">
       {heroSectionInfo.map((items) => (
         <div
           key={items.id}
