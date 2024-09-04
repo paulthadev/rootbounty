@@ -10,8 +10,12 @@ export const heroSectionInfo = [
 export const showH1 = [
   {
     id: 1,
-    heading: "Our Solution",
-    text: " At RootBounty, we are dedicated to connecting farmers and buyers in the tuber crop industry through a seamless, user-friendly platform. Here&apos;s what we offer:",
+    heading: "Our ",
+    heading2: "Solution",
+    text: " At ",
+    text2: "RootBounty, ",
+    text3:
+      "we are dedicated to connecting farmers and buyers in the tuber crop industry through a seamless, user-friendly platform. Here's what we offer:",
   },
 ];
 
