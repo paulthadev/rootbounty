@@ -1,12 +1,14 @@
+import Header from "../components/landingpage/Header";
 import HeroSection from "../components/landingpage/HeroSection";
-import Navbar from "../components/landingpage/Navbar";
+import WorkShowcase from "../components/landingpage/WorkShowcase";
 
 function LandingPage() {
   return (
-    <div>
-      <Navbar />
+    <>
+      <Header />
       <HeroSection />
-    </div>
+      <WorkShowcase />
+    </>
   );
 }
 
