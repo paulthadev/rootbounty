@@ -6,8 +6,10 @@ function LandingPage() {
   return (
     <>
       <Header />
-      <HeroSection />
-      <WorkShowcase />
+      <div className="scrollbar-hide">
+        <HeroSection />
+        <WorkShowcase />
+      </div>
     </>
   );
 }
