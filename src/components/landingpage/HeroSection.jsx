@@ -4,18 +4,16 @@
 
 const HeroSection = () => (
   <section>
-    <div className="">
-      <div className="mx-auto max-w-7xl px-6">
-        <div className="grid gap-y-6">
-          <h1 className="text-5xl leading-0 font-extrabold">
-            Fresh from Earth, available within your reach.
-          </h1>
+    <div>
+      <div>
+        <h1 className="text-5xl leading-0 lg:max-w-[30rem] font-extrabold">
+          Fresh from Earth, available within your reach.
+        </h1>
 
-          <p className="text-2xl font-bold max-w-[38.9375rem]">
-            Discover the best selection of tuber crops, sourced directly from
-            farmers around you.
-          </p>
-        </div>
+        <p className="text-2xl font-bold max-w-[38.9375rem]">
+          Discover the best selection of tuber crops, sourced directly from
+          farmers around you.
+        </p>
       </div>
     </div>
   </section>
