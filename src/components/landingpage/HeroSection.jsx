@@ -1,5 +1,6 @@
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import heroBanner from "../../assets/hero-banner.png";
+import { styles } from "../../styles/styles";
 
 const HeroSection = () => (
   <section className="h-fit flex scrollbar-hide flex-col">
@@ -12,7 +13,7 @@ const HeroSection = () => (
     </div>
 
     <div
-      className={`absolute mt-12 sm:mt-16 px-6 md:mt-24 md:mx-10 max-w-7xl lg:mt-36`}
+      className={`${styles.maxWidth} absolute mt-12 sm:mt-16 md:mt-24 lg:mt-36`}
     >
       <MainHeading />
     </div>
