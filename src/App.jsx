@@ -6,7 +6,7 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<LandingPage />} />
+        <Route path="/" index element={<LandingPage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>
