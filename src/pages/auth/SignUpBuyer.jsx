@@ -4,6 +4,7 @@ import { styles } from "../../styles/styles";
 import Header from "../../components/landingpage/Header";
 import Inputs from "../../components/Inputs";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 const SignUpBuyer = () => (
   <section className="relative flex flex-col ">
@@ -72,11 +73,12 @@ function RegisterSection() {
     e.preventDefault();
 
     if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match!");
+      toast.error("Passwords do not match!");
       return;
     }
 
-    console.log("Form submitted:", formData);
+    toast.success("Account created successfully!");
+
     setFormData("");
   };
 
