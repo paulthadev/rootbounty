@@ -125,8 +125,8 @@ function RegisterSection() {
       toast.success("Registration successful!");
       setFormData(""); // Clear the form data
 
-      // Optional: Redirect the user to a dashboard or login page after successful registration
-      navigate("/login"); // Assuming you use a navigate function
+      // Redirect the user to login page after successful registration
+      navigate("/login");
     } catch (error) {
       toast.error(
         `An unexpected error occurred. Please try again., ${error.message}`
