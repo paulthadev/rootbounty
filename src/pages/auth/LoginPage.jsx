@@ -5,6 +5,8 @@ import { styles } from "../../styles/styles";
 import Header from "../../components/landingpage/Header";
 import Inputs from "../../components/Inputs";
 import { useState } from "react";
+import toast from "react-hot-toast";
+import { supabase } from "../../utils/supabase";
 
 const LoginPage = () => (
   <section className="relative flex flex-col ">
@@ -54,7 +56,6 @@ function Heading() {
 function RegisterSection() {
   const [formData, setFormData] = useState({
     email: "",
-    phone: "",
     password: "",
   });
 
@@ -66,11 +67,24 @@ function RegisterSection() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log("Form submitted:", formData);
-    setFormData("");
+    try {
+      // Log in using Supabase authentication
+      const { error } = await supabase.auth.signInWithPassword({
+        email: formData.email,
+        password: formData.password,
+      });
+
+      if (error) throw error;
+
+      toast.success("Login successful!");
+      setFormData({ email: "", password: "" });
+    } catch (error) {
+      console.log("Error logging in:", error.message);
+      toast.error(`Error logging in, ${error.message}`);
+    }
   };
 
   return (
