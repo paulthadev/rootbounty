@@ -7,6 +7,7 @@ import Inputs from "../../components/Inputs";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { supabase } from "../../utils/supabase";
+import { useNavigate } from "react-router";
 
 const LoginPage = () => (
   <section className="relative flex flex-col ">
@@ -54,6 +55,7 @@ function Heading() {
 }
 
 function RegisterSection() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -79,8 +81,11 @@ function RegisterSection() {
 
       if (error) throw error;
 
-      toast.success("Login successful!");
       setFormData({ email: "", password: "" });
+      toast.success("Login successful!");
+
+      // Redirect to the profile page
+      navigate("/profile");
     } catch (error) {
       console.log("Error logging in:", error.message);
       toast.error(`Error logging in, ${error.message}`);
