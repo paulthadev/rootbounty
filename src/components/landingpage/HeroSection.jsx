@@ -2,6 +2,7 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 import heroBanner from "../../assets/hero-banner.png";
 import { heroSectionInfo } from "../../constants/landing";
 import { styles } from "../../styles/styles";
+import { useNavigate } from "react-router";
 
 const HeroSection = () => (
   <section className="h-fit flex flex-col scrollbar-hide">
@@ -22,6 +23,7 @@ const HeroSection = () => (
 );
 
 function MainHeading() {
+  const navigate = useNavigate();
   return (
     <div className="max-w-[15rem] scrollbar-hide  xs:max-w-[20rem] md:max-w-[25rem]  lg:max-w-[30rem] grid gap-y-8 lg:gap-y-10">
       {heroSectionInfo.map((items) => (
@@ -40,7 +42,10 @@ function MainHeading() {
       ))}
 
       <div className="flex gap-x-4 xs:gap-x-7 text-white">
-        <button className="text-xs xs:text-sm md:text-base bg-[#4CAF50] hover:bg-[#146317] px-4 py-2 rounded-md transition-all duration-300 lg:text-lg">
+        <button
+          onClick={() => navigate("/onboarding")}
+          className="text-xs xs:text-sm md:text-base bg-[#4CAF50] hover:bg-[#146317] px-4 py-2 rounded-md transition-all duration-300 lg:text-lg"
+        >
           Join now
         </button>
 
