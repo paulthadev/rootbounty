@@ -3,6 +3,7 @@ import heroBanner from "../assets/hero-banner.png";
 import { styles } from "../styles/styles";
 import { onboardingInfo } from "../constants/onboarding";
 import Header from "../components/landingpage/Header";
+import { useNavigate } from "react-router";
 
 const Onboarding = () => (
   <section className="relative flex flex-col h-[100vh] scrollbar-hide">
@@ -22,6 +23,7 @@ const Onboarding = () => (
 );
 
 function MainHeading() {
+  const navigate = useNavigate();
   return (
     <div className=" self-center sm:self-start lg:self-center">
       {onboardingInfo.map((items) => (
@@ -45,7 +47,10 @@ function MainHeading() {
                 {items.subTitle1Content}
               </h2>
 
-              <button className="text-base capitalize  bg-[#4CAF50] hover:bg-[#0d5610] px-4 py-2 rounded-md transition-all duration-300 lg:text-2xl">
+              <button
+                onClick={() => navigate("/signupfarmer")}
+                className="text-base capitalize  bg-[#4CAF50] hover:bg-[#0d5610] px-4 py-2 rounded-md transition-all duration-300 lg:text-2xl"
+              >
                 Join as a farmer
               </button>
             </div>
@@ -59,7 +64,10 @@ function MainHeading() {
                 {items.subTitle2Content}
               </h2>
 
-              <button className="text-base capitalize md:text-base bg-[#4CAF50] hover:bg-[#0d5610] px-4 py-2 rounded-md transition-all duration-300 lg:text-2xl">
+              <button
+                onClick={() => navigate("/signupbuyer")}
+                className="text-base capitalize md:text-base bg-[#4CAF50] hover:bg-[#0d5610] px-4 py-2 rounded-md transition-all duration-300 lg:text-2xl"
+              >
                 Sign-up as a buyer
               </button>
             </div>
