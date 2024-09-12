@@ -5,6 +5,7 @@ import Onboarding from "./pages/Onboarding";
 import SignUpFarmer from "./pages/auth/SignUpFarmer";
 import SignUpBuyer from "./pages/auth/SignUpBuyer";
 import LoginPage from "./pages/auth/LoginPage";
+import UserProfile from "./components/UserProfile";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/signupfarmer" element={<SignUpFarmer />} />
         <Route path="/signupbuyer" element={<SignUpBuyer />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/profile" element={<UserProfile />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>
