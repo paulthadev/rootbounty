@@ -7,23 +7,33 @@ import Inputs from "../components/Inputs";
 import { useState } from "react";
 
 const SignUpFarmer = () => (
-  <section className="relative flex flex-col h-[100vh] scrollbar-hide">
-    <Header />
+  <section className="relative flex flex-col h-[90vh]scrollbar-hide">
+    {/* Set z-index and padding to avoid overlap */}
+    <Header className="z-10 relative" />
 
-    <div className="relative w-full h-[screen]">
-      <div className="absolute inset-0 bg-black opacity-80"></div>
-      <LazyLoadImage src={heroBanner} className="w-full h-full object-cover" />
-    </div>
+    <div className="flex flex-col">
+      <div className="relative w-full h-screen">
+        {/* Background image and overlay */}
+        <div className="absolute h-screen inset-0 bg-black opacity-80"></div>
+        <LazyLoadImage
+          src={heroBanner}
+          className="w-full h-screen object-cover"
+        />
+      </div>
 
-    <div
-      className={`absolute inset-0 mt-36 items-center justify-center flex flex-col`}
-    >
-      <div className="flex flex-col gap-y-10">
-        <div className={`${styles.maxWidth}`}>
-          <Heading />
+      {/* Content section with space for the header */}
+      <div className="absolute inset-0 flex gap-y-10 flex-col justify-between pt-24">
+        {/* Heading centered */}
+        <div className="flex flex-col items-center ">
+          <div className={`${styles.maxWidth}`}>
+            <Heading />
+          </div>
         </div>
 
-        <RegisterSection />
+        {/* Register Section pushed to the bottom */}
+        <div className="w-full">
+          <RegisterSection />
+        </div>
       </div>
     </div>
   </section>
@@ -31,7 +41,7 @@ const SignUpFarmer = () => (
 
 function Heading() {
   return (
-    <div className="text-white">
+    <div className="text-white w-full">
       <h1 className="text-3xl font-bold max-w-sm mb-4">
         Welcome, <br />
         Let&apos;s Get You Started
@@ -67,97 +77,98 @@ function RegisterSection() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Simple validation example (check if passwords match)
     if (formData.password !== formData.confirmPassword) {
       alert("Passwords do not match!");
       return;
     }
 
-    // You can handle form submission logic here
     console.log("Form submitted:", formData);
   };
 
   return (
-    <div className="flex flex-col bg-white p-4">
-      <div className="px-4">
-        <h1 className="text-black font-semibold pb-4">Create New Account</h1>
+    <div className="w-full bg-white p-8 md:p-12">
+      <h1 className="text-black font-semibold pb-4 text-xl">
+        Create New Account
+      </h1>
 
-        <form onSubmit={handleSubmit} className="flex flex-col">
-          <Inputs
-            type="text"
-            placeholder="First Name"
-            name="firstname"
-            value={formData.firstname}
-            onChange={handleChange}
-          />
+      <form
+        onSubmit={handleSubmit}
+        className="grid grid-cols-1 md:grid-cols-2 gap-2"
+      >
+        <Inputs
+          type="text"
+          placeholder="First Name"
+          name="firstname"
+          value={formData.firstname}
+          onChange={handleChange}
+        />
 
-          <Inputs
-            type="text"
-            placeholder="Last Name"
-            name="lastname"
-            value={formData.lastname}
-            onChange={handleChange}
-          />
+        <Inputs
+          type="text"
+          placeholder="Last Name"
+          name="lastname"
+          value={formData.lastname}
+          onChange={handleChange}
+        />
 
-          <Inputs
-            type="text"
-            placeholder="Location"
-            name="location"
-            value={formData.location}
-            onChange={handleChange}
-          />
+        <Inputs
+          type="text"
+          placeholder="Location"
+          name="location"
+          value={formData.location}
+          onChange={handleChange}
+        />
 
-          <Inputs
-            type="email"
-            placeholder="Email Address"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-          />
+        <Inputs
+          type="email"
+          placeholder="Email Address"
+          name="email"
+          value={formData.email}
+          onChange={handleChange}
+        />
 
-          <Inputs
-            type="tel"
-            placeholder="Phone Number"
-            name="phone"
-            value={formData.phone}
-            onChange={handleChange}
-          />
+        <Inputs
+          type="tel"
+          placeholder="Phone Number"
+          name="phone"
+          value={formData.phone}
+          onChange={handleChange}
+        />
 
-          <select
-            name="tuber"
-            className="bg-white my-2 border outline-none border-gray-400 w-full p-2 rounded-lg text-gray-900"
-            value={formData.tuber}
-            onChange={handleChange}
-          >
-            <option value="">Tubers you grow</option>
-            <option value="yam">Yam</option>
-            <option value="potatoes">Potatoes</option>
-          </select>
+        <select
+          name="tuber"
+          className="bg-white border outline-none border-gray-400 w-full p-2 rounded-lg text-gray-900"
+          value={formData.tuber}
+          onChange={handleChange}
+        >
+          <option value="">Tubers you grow</option>
+          <option value="yam">Yam</option>
+          <option value="potatoes">Potatoes</option>
+        </select>
 
-          <Inputs
-            type="password"
-            placeholder="Password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-          />
+        <Inputs
+          type="password"
+          placeholder="Password"
+          name="password"
+          value={formData.password}
+          onChange={handleChange}
+        />
 
-          <Inputs
-            type="password"
-            placeholder="Confirm Password"
-            name="confirmPassword"
-            value={formData.confirmPassword}
-            onChange={handleChange}
-          />
+        <Inputs
+          type="password"
+          placeholder="Confirm Password"
+          name="confirmPassword"
+          value={formData.confirmPassword}
+          onChange={handleChange}
+        />
 
-          <button
-            type="submit"
-            className="btn btn-block bg-green-500 hover:bg-green-800 text-white my-4 text-lg border-none"
-          >
-            Sign Up as Farmer
-          </button>
-        </form>
-      </div>
+        <button
+          type="submit"
+          className="md:col-span-2 bg-green-500 hover:bg-green-800 text-white py-3 rounded-lg text-lg"
+        >
+          Sign Up as Farmer
+        </button>
+      </form>
     </div>
   );
 }
