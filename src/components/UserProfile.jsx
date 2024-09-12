@@ -3,6 +3,8 @@ import useCurrentUser from "../hooks/useCurrentUser";
 const UserProfile = () => {
   const { user, loading, error } = useCurrentUser();
 
+  console.log(user);
+
   if (loading) {
     return <p>Loading...</p>;
   }

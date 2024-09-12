@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { supabase } from "../hooks/useCurrentUser";
+import supabase from "../hooks/useCurrentUser";
 
 const useCurrentUser = () => {
   const [user, setUser] = useState(null);
@@ -21,21 +21,6 @@ const useCurrentUser = () => {
     };
 
     fetchUser();
-
-    // Optionally, listen for auth changes to keep the user state in sync
-    const { data: authListener } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        if (session) {
-          setUser(session.user);
-        } else {
-          setUser(null);
-        }
-      }
-    );
-
-    return () => {
-      authListener.subscription.unsubscribe();
-    };
   }, []);
 
   return { user, loading, error };

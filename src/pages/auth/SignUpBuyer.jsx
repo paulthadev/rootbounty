@@ -5,6 +5,8 @@ import Header from "../../components/landingpage/Header";
 import Inputs from "../../components/Inputs";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { supabase } from "../../utils/supabase";
+import { useNavigate } from "react-router";
 
 const SignUpBuyer = () => (
   <section className="relative flex flex-col ">
@@ -52,6 +54,7 @@ function Heading() {
 }
 
 function RegisterSection() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     firstname: "",
     lastname: "",
@@ -59,6 +62,7 @@ function RegisterSection() {
     phone: "",
     password: "",
     confirmPassword: "",
+    businessName: "",
   });
 
   const handleChange = (e) => {
@@ -69,7 +73,7 @@ function RegisterSection() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (formData.password !== formData.confirmPassword) {
@@ -77,14 +81,52 @@ function RegisterSection() {
       return;
     }
 
-    toast.success("Account created successfully!");
+    // Supabase handles user registration and stores the password securely
+    // eslint-disable-next-line no-unused-vars
+    const { user, error } = await supabase.auth.signUp({
+      email: formData.email,
+      password: formData.password,
+    });
 
-    setFormData("");
+    if (error) {
+      console.error("Error during registration:", error.message);
+      toast.error(`Registration failed: ${error.message}`);
+      return;
+    }
+
+    // Insert buyer data into the 'buyer' table
+    // eslint-disable-next-line no-unused-vars
+    const { data, error: insertError } = await supabase.from("buyer").insert([
+      {
+        firstname: formData.firstname,
+        lastname: formData.lastname,
+        email: formData.email,
+        phone: formData.phone,
+        business_name: formData.businessName,
+      },
+    ]);
+
+    if (insertError) {
+      console.error("Error during profile creation:", insertError.message);
+      toast.error(`Profile creation failed: ${insertError.message}`);
+    } else {
+      toast.success("Account created successfully!");
+      navigate("/login");
+      setFormData({
+        firstname: "",
+        lastname: "",
+        email: "",
+        phone: "",
+        password: "",
+        confirmPassword: "",
+        businessName: "", // Reset businessName as well
+      });
+    }
   };
 
   return (
     <div className="w-full bg-white p-8 md:p-12 ">
-      <h1 className="text-black  lg:text-3xl font-semibold pb-4 text-xl">
+      <h1 className="text-black lg:text-3xl font-semibold pb-4 text-xl">
         Create New Account
       </h1>
 
