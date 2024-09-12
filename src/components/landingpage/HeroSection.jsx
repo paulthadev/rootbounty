@@ -49,7 +49,10 @@ function MainHeading() {
           Join now
         </button>
 
-        <button className="text-xs hover:bg-neutral-950 hover:text-white hover:border-neutral-950 px-4 py-2 xs:text-sm border border-white rounded-md transition-all duration-300 lg:text-lg">
+        <button
+          onClick={() => navigate("/login")}
+          className="text-xs hover:bg-neutral-950 hover:text-white hover:border-neutral-950 px-4 py-2 xs:text-sm border border-white rounded-md transition-all duration-300 lg:text-lg"
+        >
           Login
         </button>
       </div>

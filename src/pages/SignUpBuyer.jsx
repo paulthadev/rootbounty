@@ -77,6 +77,7 @@ function RegisterSection() {
     }
 
     console.log("Form submitted:", formData);
+    setFormData("");
   };
 
   return (
