@@ -7,13 +7,13 @@ function WorkShowcase() {
   return (
     <section className="bg-white py-8 scrollbar-hide">
       <div
-        className={`flex  flex-col sm:flex-row sm:items-start  gap-y-4 justify-center ${styles.maxWidth}`}
+        className={`flex  flex-col sm:flex-row sm:items-center gap-y-4 justify-center ${styles.maxWidth}`}
       >
-        <div className="relative flex justify-center sm:justify-start w-full">
-          <div className="w-1/2 h-1/2 sm:w-4/5 sm:h-4/5 md:w-11/12 ">
+        <div className="relative flex justify-center sm:justify-start md:items-center md:justify-center w-full">
+          <div className="w-1/2 h-1/2 sm:w-4/5 sm:h-4/5 md:w-11/12 lg:w-2/3 lg:h-2/3">
             <LazyLoadImage
               src={farm}
-              className="object-contain w-full h-full"
+              className="object-contain w-full h-full "
             />
           </div>
         </div>
