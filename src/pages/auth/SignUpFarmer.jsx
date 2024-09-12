@@ -1,8 +1,8 @@
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import heroBanner from "../assets/hero-banner.png";
-import { styles } from "../styles/styles";
-import Header from "../components/landingpage/Header";
-import Inputs from "../components/Inputs";
+import { styles } from "../../styles/styles";
+import Header from "../../components/landingpage/Header";
+import Inputs from "../../components/Inputs";
 import { useState } from "react";
 
 const SignUpFarmer = () => (
