@@ -2,8 +2,9 @@ import { Route, Routes } from "react-router";
 import LandingPage from "./pages/LandingPage";
 import NotFound from "./pages/NotFound";
 import Onboarding from "./pages/Onboarding";
-import SignUpFarmer from "./pages/SignUpFarmer";
-import SignUpBuyer from "./pages/SignUpBuyer";
+import SignUpFarmer from "./pages/auth/SignUpFarmer";
+import SignUpBuyer from "./pages/auth/SignUpBuyer";
+import LoginPage from "./pages/auth/LoginPage";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route path="/onboarding" index element={<Onboarding />} />
         <Route path="/signupfarmer" element={<SignUpFarmer />} />
         <Route path="/signupbuyer" element={<SignUpBuyer />} />
+        <Route path="/login" element={<LoginPage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>
