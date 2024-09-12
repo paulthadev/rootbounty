@@ -4,6 +4,7 @@ import NotFound from "./pages/NotFound";
 import Onboarding from "./pages/Onboarding";
 import SignUpFarmer from "./pages/SignUpFarmer";
 import SignUpBuyer from "./pages/SignUpBuyer";
+import LoginPage from "./pages/LoginPage";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route path="/onboarding" index element={<Onboarding />} />
         <Route path="/signupfarmer" element={<SignUpFarmer />} />
         <Route path="/signupbuyer" element={<SignUpBuyer />} />
+        <Route path="/login" element={<LoginPage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>
