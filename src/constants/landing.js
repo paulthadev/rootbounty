@@ -21,6 +21,7 @@ export const showH1 = [
 
 export const showcases = [
   {
+    id: 1,
     heading: "For Farmers",
 
     details: [
