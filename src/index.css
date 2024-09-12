@@ -7,15 +7,8 @@ body {
     overflow-x: hidden;
 }
 
-/* Hide ScrollBar */
-.scrollbar-hide {
-    -ms-overflow-style: none !important;
-    /* IE and Edge */
-    scrollbar-width: none !important;
-    /* Firefox */
-}
 
-.scrollbar-hide::-webkit-scrollbar {
-    display: none !important;
-    /* Chrome, Safari and Opera */
+.registrationinput:-webkit-autofill {
+    -webkit-text-fill-color: black !important;
+    transition: background-color 5000s ease-in-out 0s;
 }
