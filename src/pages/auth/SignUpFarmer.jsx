@@ -4,6 +4,9 @@ import { styles } from "../../styles/styles";
 import Header from "../../components/landingpage/Header";
 import Inputs from "../../components/Inputs";
 import { useState } from "react";
+import { supabase } from "../../utils/supabase";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router";
 
 const SignUpFarmer = () => (
   <section className="relative flex flex-col ">
@@ -50,6 +53,8 @@ function Heading() {
 }
 
 function RegisterSection() {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     firstname: "",
     lastname: "",
@@ -69,16 +74,64 @@ function RegisterSection() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  // Handle Registration
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match!");
+      toast.error("Passwords do not match!");
       return;
     }
 
-    console.log("Form submitted:", formData);
-    setFormData("");
+    try {
+      // Step 1: Register the user and store the password securely using Supabase Auth
+
+      // eslint-disable-next-line no-unused-vars
+      const { user, error: authError } = await supabase.auth.signUp({
+        email: formData.email,
+        password: formData.password,
+      });
+
+      if (authError) {
+        toast.error(`Registration failed: ${authError.message}`);
+        console.error("Error during registration:", authError.message);
+        return;
+      }
+
+      // Step 2: If user is successfully created, insert farmer data into the 'farmer' table
+
+      // eslint-disable-next-line no-unused-vars
+      const { data, error: insertError } = await supabase
+        .from("farmer")
+        .insert([
+          {
+            firstname: formData.firstname,
+            lastname: formData.lastname,
+            location: formData.location,
+            email: formData.email,
+            phone: formData.phone,
+            tuber: formData.tuber,
+          },
+        ]);
+
+      if (insertError) {
+        // If there's an error inserting farmer data, you might consider deleting the created user
+        toast.error(`Profile creation failed: ${insertError.message}`);
+        console.error("Error during profile creation:", insertError.message);
+        return;
+      }
+
+      // Step 3: If everything is successful, notify the user and redirect or clear form
+      toast.success("Registration successful!");
+      setFormData(""); // Clear the form data
+
+      // Optional: Redirect the user to a dashboard or login page after successful registration
+      navigate("/login"); // Assuming you use a navigate function
+    } catch (error) {
+      toast.error(
+        `An unexpected error occurred. Please try again., ${error.message}`
+      );
+    }
   };
 
   return (
@@ -98,7 +151,6 @@ function RegisterSection() {
           value={formData.firstname}
           onChange={handleChange}
         />
-
         <Inputs
           type="text"
           placeholder="Last Name"
@@ -106,7 +158,6 @@ function RegisterSection() {
           value={formData.lastname}
           onChange={handleChange}
         />
-
         <Inputs
           type="text"
           placeholder="Location"
@@ -114,7 +165,6 @@ function RegisterSection() {
           value={formData.location}
           onChange={handleChange}
         />
-
         <Inputs
           type="email"
           placeholder="Email Address"
@@ -122,7 +172,6 @@ function RegisterSection() {
           value={formData.email}
           onChange={handleChange}
         />
-
         <Inputs
           type="tel"
           placeholder="Phone Number"
@@ -130,6 +179,7 @@ function RegisterSection() {
           value={formData.phone}
           onChange={handleChange}
         />
+
         <select
           name="tuber"
           className="select bg-white border outline-none border-gray-400 w-full px-2 focus:border-gray-400 rounded-lg text-gray-900"
@@ -139,6 +189,9 @@ function RegisterSection() {
           <option value="">Tubers you grow</option>
           <option value="yam">Yam</option>
           <option value="potatoes">Potatoes</option>
+          <option value="Cassava">Cassava</option>
+          <option value="Sweet Potato">Sweet Potato</option>
+          <option value="Ginger">Ginger</option>
         </select>
 
         <Inputs
@@ -148,7 +201,6 @@ function RegisterSection() {
           value={formData.password}
           onChange={handleChange}
         />
-
         <Inputs
           type="password"
           placeholder="Confirm Password"
