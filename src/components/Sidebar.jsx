@@ -1,17 +1,30 @@
-import { useEffect } from "react";
-import useCurrentUser from "../hooks/useCurrentUser";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { links } from "../constants/sidebarLinks";
 import { NavLink } from "react-router-dom";
+import LogoutModal from "./dashboard/LogoutModal";
+import { handleLogout } from "../utils/logout";
 
 const Sidebar = () => {
-  const { useData, loading } = useCurrentUser();
+  const navigate = useNavigate();
+  const [isModalOpen, setModalOpen] = useState(false);
+
+  const handleLogoutClick = () => {
+    setModalOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setModalOpen(false);
+  };
 
   return (
-    <section className="bg-[#4CAF50CF] h-screen  ">
+    <section className="bg-[#4CAF50CF] h-screen">
       <nav className="pt-[1.6rem] bg-[#4CAF50]">
-        <span className="uppercase text-white font-bold text-[2.5rem] px-10">
-          rb
-        </span>
+        <Link to="/">
+          <span className="uppercase text-white font-bold text-[2.5rem] px-10">
+            rb
+          </span>
+        </Link>
       </nav>
       <div>
         <ul className="px-4 py-6">
@@ -30,10 +43,21 @@ const Sidebar = () => {
                 </h3>
 
                 {items.map((item) => {
-                  return (
+                  return item.title === "logout" ? (
+                    <button
+                      key={item.link}
+                      onClick={handleLogoutClick}
+                      className="block px-2 rounded-md text-white mb-[.81rem]"
+                    >
+                      <h5 className="text-base font-semibold capitalize">
+                        {item.title}
+                      </h5>
+                    </button>
+                  ) : (
                     <NavLink
                       to={`/dashboard${item.link}`}
                       key={item.link}
+                      end
                       className={({ isActive }) =>
                         isActive
                           ? "bg-[#307333] block p-2 rounded-md text-white mb-[.81rem]"
@@ -46,12 +70,18 @@ const Sidebar = () => {
                     </NavLink>
                   );
                 })}
-                <h4></h4>
               </li>
             );
           })}
         </ul>
       </div>
+
+      {/* Use the LogoutModal component */}
+      <LogoutModal
+        isOpen={isModalOpen}
+        onClose={handleModalClose}
+        onConfirm={handleLogout}
+      />
     </section>
   );
 };
