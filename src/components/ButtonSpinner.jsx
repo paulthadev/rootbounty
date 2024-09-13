@@ -1,7 +1,7 @@
 function ButtonSpinner() {
   return (
     <div className="grid place-items-center">
-      <div className="loading loading-spinner bg-blue-950"></div>
+      <div className="loading loading-spinner bg-gray-50"></div>
     </div>
   );
 }
