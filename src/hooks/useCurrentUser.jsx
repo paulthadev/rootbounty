@@ -3,11 +3,9 @@ import { supabase } from "../utils/supabase"; // Ensure the path is correct
 
 const useCurrentUser = () => {
   const [user, setUser] = useState(null);
-  const [userData, setUserData] = useState(null); // State for storing user data from the database
+  const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  console.log(userData);
 
   useEffect(() => {
     const fetchUser = async () => {
