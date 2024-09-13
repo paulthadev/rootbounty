@@ -7,6 +7,7 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { supabase } from "../../utils/supabase";
 import { useNavigate } from "react-router";
+import ButtonSpinner from "../../components/ButtonSpinner";
 
 const SignUpBuyer = () => (
   <section className="relative flex flex-col ">
@@ -55,6 +56,7 @@ function Heading() {
 
 function RegisterSection() {
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     firstname: "",
     lastname: "",
@@ -76,14 +78,16 @@ function RegisterSection() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    setIsLoading(true);
+
     if (formData.password !== formData.confirmPassword) {
       toast.error("Passwords do not match!");
+      setIsLoading(false);
       return;
     }
 
     // Supabase handles user registration and stores the password securely
-    // eslint-disable-next-line no-unused-vars
-    const { user, error } = await supabase.auth.signUp({
+    const { error } = await supabase.auth.signUp({
       email: formData.email,
       password: formData.password,
     });
@@ -91,12 +95,13 @@ function RegisterSection() {
     if (error) {
       console.error("Error during registration:", error.message);
       toast.error(`Registration failed: ${error.message}`);
+
+      setIsLoading(false);
       return;
     }
 
     // Insert buyer data into the 'buyer' table
-    // eslint-disable-next-line no-unused-vars
-    const { data, error: insertError } = await supabase.from("buyer").insert([
+    const { error: insertError } = await supabase.from("buyer").insert([
       {
         firstname: formData.firstname,
         lastname: formData.lastname,
@@ -109,6 +114,7 @@ function RegisterSection() {
     if (insertError) {
       console.error("Error during profile creation:", insertError.message);
       toast.error(`Profile creation failed: ${insertError.message}`);
+      setIsLoading(false);
     } else {
       toast.success("Account created successfully!");
       navigate("/login");
@@ -122,6 +128,7 @@ function RegisterSection() {
         businessName: "", // Reset businessName as well
       });
     }
+    setIsLoading(false);
   };
 
   return (
@@ -194,7 +201,7 @@ function RegisterSection() {
           type="submit"
           className="md:col-span-2 bg-green-500 hover:bg-green-800 text-white py-3 rounded-lg text-lg"
         >
-          Create Buyer Account
+          {isLoading ? <ButtonSpinner /> : "Create Buyer Account"}
         </button>
       </form>
     </div>
