@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { supabase } from "../utils/supabase"; // Ensure the path is correct
+import { supabase } from "../utils/supabase";
 
 const useCurrentUser = () => {
   const [user, setUser] = useState(null);
