@@ -11,6 +11,6 @@ export const handleLogout = async () => {
     // Optionally redirect to login page or home
     window.location.href = "/login"; // Replace with the route where users should go after logout
   } catch (err) {
-    console.error("Error logging out:", err.message);
+    toast.error(`Error logging out, ${err.message}`);
   }
 };
