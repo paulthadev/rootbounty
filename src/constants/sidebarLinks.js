@@ -1,10 +1,10 @@
-export const links = [
+export const buyerlinks = [
   {
     subtitle: "overview",
     items: [
       {
         title: "products",
-        link: "/",
+        link: "/buyer",
       },
       {
         title: "orders",
@@ -21,7 +21,36 @@ export const links = [
     items: [
       {
         title: "profile",
-        link: "/profile",
+        link: "/buyerprofile",
+      },
+      {
+        title: "logout",
+        link: "/logout",
+      },
+    ],
+  },
+];
+
+export const farmerlinks = [
+  {
+    subtitle: "overview",
+    items: [
+      {
+        title: "add product",
+        link: "/farmer",
+      },
+      {
+        title: "earnings",
+        link: "/earnings",
+      },
+    ],
+  },
+  {
+    subtitle: "account",
+    items: [
+      {
+        title: "profile",
+        link: "/farmerprofile",
       },
       {
         title: "logout",
