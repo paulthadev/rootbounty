@@ -1,36 +1,45 @@
-import Header from "../../components/landingpage/Header";
+import { useEffect } from "react";
+import { useNavigate } from "react-router";
 import useCurrentUser from "../../hooks/useCurrentUser";
-import { handleLogout } from "../../utils/logout";
+import Spinner from "../../components/Spinner";
 
 const UserProfile = () => {
+  const navigate = useNavigate();
   const { userData, loading, error } = useCurrentUser();
 
+  useEffect(() => {
+    if (!loading && userData) {
+      if (userData?.user_type === "buyer") {
+        // Redirect to the buyer dashboard
+        window.location.replace("/buyer/dashboard");
+      } else {
+        // Redirect to the farmer dashboard
+        window.location.replace("/farmer/dashboard");
+      }
+    }
+  }, [navigate, userData, loading]);
+
   if (loading) {
-    return <p>Loading...</p>;
+    return <Spinner />;
   }
 
   if (error) {
-    return <p>Error: {error}</p>;
+    return (
+      <div className="h-screen grid place-items-center">
+        <p className="text-red-500 text-center">Error: {error}</p>
+      </div>
+    );
   }
 
   if (!userData) {
-    return <p>No user is logged in.</p>;
+    return (
+      <div className="h-screen grid place-items-center">
+        <p className="text-red-500">No User Logged In</p>
+      </div>
+    );
   }
 
-  return (
-    <div>
-      <Header />
-      <h1>
-        Welcome, {userData.firstname}
-        {userData.lastname}
-      </h1>
-      <p>Account Type: {userData.user_type}</p>
-
-      <button onClick={handleLogout} className="btn btn-warning btn-sm">
-        Logout
-      </button>
-    </div>
-  );
+  return null; // Since we're handling navigation, we don't need to render anything here
 };
 
 export default UserProfile;
