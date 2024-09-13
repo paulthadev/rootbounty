@@ -77,17 +77,15 @@ const router = createBrowserRouter([
         element: <BuyerDashboard />,
       },
       {
-        path:':productName',
+        path: "buyer/:productName",
         element: <SingleProduct />,
       },
       {
         path: "farmer",
         element: <FarmerDashboard />,
-        element: <FarmerDashboard />,
       },
       {
         path: "orders",
-        element: <Order />,
         element: <Order />,
       },
       {
