@@ -11,7 +11,7 @@ function BuyerDashboard() {
     if (!loading && userData) {
       if (userData?.user_type !== "buyer") {
         // Redirect to the farmer dashboard
-        navigate("/farmer/dashboard", { replace: true });
+        navigate("/farmer", { replace: true });
       }
     }
   }, [userData, loading]);
