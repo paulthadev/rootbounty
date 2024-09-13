@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import useCurrentUser from "../hooks/useCurrentUser"; // Assuming you have a hook to get user session
+import Spinner from "../components/Spinner";
 
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useCurrentUser(); // Add a loading state to determine when user is being fetched
@@ -20,7 +21,7 @@ const ProtectedRoute = ({ children }) => {
 
   if (loading || !initialized) {
     // Show a loader or null until the user state is determined
-    return <div>Loading...</div>;
+    return <Spinner />;
   }
 
   return user ? children : null;
