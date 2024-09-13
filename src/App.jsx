@@ -8,6 +8,8 @@ import LoginPage from "./pages/auth/LoginPage";
 import UserProfile from "./pages/dashboard/UserProfile";
 import AuthCheck from "./routes/AuthCheck";
 import ProtectedRoute from "./routes/ProtectedRoutes";
+import BuyerDashboard from "./pages/dashboard/BuyerDashboard";
+import FarmerDashboard from "./pages/dashboard/FarmerDashboard";
 
 function App() {
   return (
@@ -56,6 +58,24 @@ function App() {
           element={
             <ProtectedRoute>
               <UserProfile />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/buyer/dashboard"
+          element={
+            <ProtectedRoute>
+              <BuyerDashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/farmer/dashboard"
+          element={
+            <ProtectedRoute>
+              <FarmerDashboard />
             </ProtectedRoute>
           }
         />
