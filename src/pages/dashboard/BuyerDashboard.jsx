@@ -1,15 +1,17 @@
 import { useEffect } from "react";
 import useCurrentUser from "../../hooks/useCurrentUser";
 import { handleLogout } from "../../utils/logout";
+import { useNavigate } from "react-router";
 
 function BuyerDashboard() {
+  const navigate = useNavigate();
   const { userData, loading } = useCurrentUser();
 
   useEffect(() => {
     if (!loading && userData) {
       if (userData?.user_type !== "buyer") {
         // Redirect to the farmer dashboard
-        window.location.replace("/farmer/dashboard");
+        navigate("/farmer/dashboard", { replace: true });
       }
     }
   }, [userData, loading]);
