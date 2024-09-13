@@ -5,6 +5,7 @@ import Inputs from "../../components/Inputs";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { supabase } from "../../utils/supabase";
+import ButtonSpinner from "../../components/ButtonSpinner";
 
 const SignUpBuyer = () => (
   <section className="relative flex flex-col">
@@ -48,6 +49,7 @@ function Heading() {
 }
 
 function RegisterSection() {
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     firstname: "",
     lastname: "",
@@ -69,12 +71,17 @@ function RegisterSection() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    setIsLoading(true);
+
     if (formData.password !== formData.confirmPassword) {
       toast.error("Passwords do not match!");
+      setIsLoading(false);
       return;
     }
 
     try {
+      setIsLoading(true);
+
       // Step 1: Register the user and store the password securely using Supabase Auth
 
       // eslint-disable-next-line no-unused-vars
@@ -85,6 +92,8 @@ function RegisterSection() {
 
       if (authError) {
         toast.error(`Registration failed: ${authError.message}`);
+
+        setIsLoading(false);
         return;
       }
 
@@ -103,6 +112,7 @@ function RegisterSection() {
 
       if (insertError) {
         toast.error(`Profile creation failed: ${insertError.message}`);
+        setIsLoading(false);
         return;
       }
 
@@ -116,10 +126,13 @@ function RegisterSection() {
         password: "",
         confirmPassword: "",
       });
+
+      setIsLoading(false);
     } catch (error) {
       toast.error(
         `An unexpected error occurred. Please try again., ${error.message}`
       );
+      setIsLoading(false);
     }
   };
 
@@ -193,7 +206,7 @@ function RegisterSection() {
           type="submit"
           className="md:col-span-2 bg-green-500 hover:bg-green-800 text-white py-3 rounded-lg text-lg"
         >
-          Create Buyer Account
+          {isLoading ? <ButtonSpinner /> : "Create Farmer Account"}
         </button>
       </form>
     </div>
