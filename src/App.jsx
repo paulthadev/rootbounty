@@ -13,6 +13,9 @@ import ProtectedRoute from "./routes/ProtectedRoutes";
 import DashboardLayout from "./pages/dashboard/dashboardLayout";
 import Order from "./pages/dashboard/Order";
 import Cart from "./pages/dashboard/Cart";
+import Earnings from "./pages/dashboard/Earnings";
+import BuyerProfile from "./pages/dashboard/BuyerProfile";
+import FarmerProfile from "./pages/dashboard/FarmerProfile";
 
 const router = createBrowserRouter([
   {
@@ -69,7 +72,7 @@ const router = createBrowserRouter([
 
     children: [
       {
-        index: true,
+        path: "buyer",
         element: <BuyerDashboard />,
       },
       {
@@ -83,6 +86,18 @@ const router = createBrowserRouter([
       {
         path: "cart",
         element: <Cart />,
+      },
+      {
+        path: "earnings",
+        element: <Earnings />,
+      },
+      {
+        path: "buyerprofile",
+        element: <BuyerProfile />,
+      },
+      {
+        path: "farmerprofile",
+        element: <FarmerProfile />,
       },
     ],
   },
