@@ -1,12 +1,14 @@
+// src/components/Sidebar.js
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { links } from "../constants/sidebarLinks";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
+import { buyerlinks, farmerlinks } from "../constants/sidebarLinks";
 import LogoutModal from "./dashboard/LogoutModal";
 import { handleLogout } from "../utils/logout";
+import useCurrentUser from "../hooks/useCurrentUser";
 
 const Sidebar = () => {
-  const navigate = useNavigate();
+  const { userData } = useCurrentUser();
+
   const [isModalOpen, setModalOpen] = useState(false);
 
   const handleLogoutClick = () => {
@@ -16,6 +18,9 @@ const Sidebar = () => {
   const handleModalClose = () => {
     setModalOpen(false);
   };
+
+  // Determine which links to display based on user type
+  const links = userData?.user_type === "buyer" ? buyerlinks : farmerlinks;
 
   return (
     <section className="bg-[#4CAF50CF] h-screen">
