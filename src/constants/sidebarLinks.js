@@ -24,7 +24,7 @@ export const links = [
         link: "/profile",
       },
       {
-        title: "log0ut",
+        title: "logout",
         link: "/logout",
       },
     ],
