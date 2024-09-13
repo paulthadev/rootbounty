@@ -11,10 +11,10 @@ const UserProfile = () => {
     if (!loading && userData) {
       if (userData?.user_type === "buyer") {
         // Redirect to the buyer dashboard
-        window.location.replace("/buyer/dashboard");
+        navigate("/dashboard");
       } else {
         // Redirect to the farmer dashboard
-        window.location.replace("/farmer/dashboard");
+        navigate("/dashboard/farmer");
       }
     }
   }, [navigate, userData, loading]);

@@ -19,5 +19,10 @@ export default {
       },
     },
   },
+  // eslint-disable-next-line no-undef
   plugins: [require("daisyui")],
+
+  daisyui: {
+    themes: ["light"],
+  },
 };
