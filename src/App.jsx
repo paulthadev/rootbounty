@@ -74,21 +74,15 @@ const router = createBrowserRouter([
       },
       {
         path: "farmer",
-        element: (
-            <FarmerDashboard />
-        ),
+        element: <FarmerDashboard />,
       },
       {
         path: "orders",
-        element: (
-          <Order />
-        ),
+        element: <Order />,
       },
       {
         path: "cart",
-        element: (
-            <Cart />
-        ),
+        element: <Cart />,
       },
     ],
   },
