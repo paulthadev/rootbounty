@@ -8,6 +8,8 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { supabase } from "../../utils/supabase";
 import { useNavigate } from "react-router";
+import ButtonSpinner from "../../components/ButtonSpinner";
+import { Link } from "react-router-dom";
 
 const LoginPage = () => (
   <section className="relative flex flex-col ">
@@ -56,6 +58,7 @@ function Heading() {
 
 function RegisterSection() {
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -73,6 +76,7 @@ function RegisterSection() {
     e.preventDefault();
 
     try {
+      setIsLoading(true);
       // Log in using Supabase authentication
       const { error } = await supabase.auth.signInWithPassword({
         email: formData.email,
@@ -83,12 +87,14 @@ function RegisterSection() {
 
       setFormData({ email: "", password: "" });
       toast.success("Login successful!");
+      setIsLoading(false);
 
       // Redirect to the profile page
       navigate("/profile");
     } catch (error) {
       console.log("Error logging in:", error.message);
       toast.error(`Error logging in, ${error.message}`);
+      setIsLoading(false);
     }
   };
 
@@ -130,9 +136,15 @@ function RegisterSection() {
           type="submit"
           className="md:col-span-2 bg-green-500 hover:bg-green-800 text-white py-3 rounded-lg text-lg"
         >
-          Login
+          {isLoading ? <ButtonSpinner /> : "Login"}
         </button>
       </form>
+      <p className="text-center pt-2 ">
+        Don&apos;t have an account?{" "}
+        <Link to="/onboarding" className="font-semibold">
+          Sign up
+        </Link>
+      </p>
     </div>
   );
 }
