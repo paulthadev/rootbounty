@@ -1,3 +1,4 @@
+import Decimal from "decimal.js";
 import { useSelector, useDispatch } from "react-redux";
 import {
   incrementQuantity,
@@ -12,8 +13,13 @@ const Cart = () => {
 
   console.log(products);
 
+  // In calculateTotalPrice
   const calculateTotalPrice = () => {
-    return products.reduce((total, product) => total + product.total, 0);
+    const total = products.reduce(
+      (total, product) => total.plus(new Decimal(product.total)),
+      new Decimal(0)
+    );
+    return total.toFixed(2);
   };
 
   const calculateTotalItems = () => {
