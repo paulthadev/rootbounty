@@ -5,26 +5,28 @@ import useCurrentUser from "../hooks/useCurrentUser"; // Assuming you have a hoo
 import Spinner from "../components/Spinner";
 
 const ProtectedRoute = ({ children }) => {
-  const { user, loading } = useCurrentUser(); // Add a loading state to determine when user is being fetched
+  const { user, loading } = useCurrentUser();
   const navigate = useNavigate();
-  const [initialized, setInitialized] = useState(false); // Track if user state is fully initialized
+  const [initialized, setInitialized] = useState(false);
 
   useEffect(() => {
-    if (!loading && !user && initialized) {
-      // If user is not logged in and it's fully initialized, redirect to login
-      navigate("/login");
-    } else if (!loading && user) {
-      // Once user is logged in, we can consider initialization complete
+    if (!loading) {
+      // Once loading is done, initialization is complete, regardless of user status
       setInitialized(true);
+
+      // If no user and initialization is done, redirect to login
+      if (!user) {
+        navigate("/login");
+      }
     }
-  }, [user, loading, navigate, initialized]);
+  }, [user, loading, navigate]);
 
   if (loading || !initialized) {
-    // Show a loader or null until the user state is determined
+    // Show a loader while determining the user state
     return <Spinner />;
   }
 
-  return user ? children : null;
+  return user ? children : null; // Render children if the user exists
 };
 
 export default ProtectedRoute;
