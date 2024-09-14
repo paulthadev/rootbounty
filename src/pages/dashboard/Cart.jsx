@@ -1,4 +1,6 @@
+import { BsDash } from "react-icons/bs";
 import potatoe from "/potatoe.png";
+import { BiPlus } from "react-icons/bi";
 
 const Cart = () => {
   const products = [
@@ -41,9 +43,19 @@ const Cart = () => {
                     <h2 className="text-lg capitalize font-bold">
                       {product.productName}
                     </h2>
-                    <p className="text-sm">Price: ₦{product.price}</p>
-                    <p className="text-sm">Quantity: {product.quantity}</p>
-                    <p className="text-sm font-bold">Total: ₦{product.total}</p>
+                    <p>Price: ₦{product.price}</p>
+                    <div className="flex justify-between items-center">
+                      <p>Quantity: {product.quantity}</p>
+                      <div className="flex gap-2 px-2 items-center">
+                        <button className="text-base w-1/2 btn-primary bg-black text-white rounded-full btn btn-md ">
+                          <BsDash />
+                        </button>
+                        <button className="text-base w-1/2 btn-primary bg-black text-white rounded-full btn btn-md ">
+                          <BiPlus />
+                        </button>
+                      </div>
+                    </div>
+                    <p className="text-lg font-bold">Total: ₦{product.total}</p>
                   </div>
                 </div>
               );
@@ -54,17 +66,17 @@ const Cart = () => {
         {/* Cart Summary */}
         <div className="lg:col-span-2 col-span-4">
           <div className="bg-white p-4 rounded-lg shadow-md">
-            <h2 className="text-lg font-bold mb-4">Cart Summary</h2>
+            <h2 className="text-2xl font-bold mb-4">Cart Summary</h2>
             <div className="flex justify-between items-center">
-              <p className="text-sm">Total Items:</p>
-              <p className="text-sm font-bold">2</p>
+              <p className="text-lg ">Total Items:</p>
+              <p className="text-lg font-bold">2</p>
             </div>
             <div className="flex justify-between items-center mt-2">
-              <p className="text-sm">Total Price:</p>
-              <p className="text-sm font-bold">$400</p>
+              <p className="text-lg">Total Price:</p>
+              <p className="text-lg font-bold">$400</p>
             </div>
 
-            <button className=" btn-block bg-green-500 hover:bg-green-800 text-white py-2 px-4 my-4 rounded-lg">
+            <button className="btn-block bg-green-500 hover:bg-green-800 text-white text-lg  btn btn-primary btn-md my-4 rounded-2xl">
               Checkout
             </button>
           </div>
