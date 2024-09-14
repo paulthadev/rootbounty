@@ -1,9 +1,21 @@
 /* eslint-disable react/prop-types */
+import { useState } from "react";
 import { BsDash, BsTrash2 } from "react-icons/bs";
-import formatPrice from "../../utils/formatPrice";
 import { BiPlus } from "react-icons/bi";
+import formatPrice from "../../utils/formatPrice";
+import ContactFarmerModal from "./ContactFarmerModal";
 
 const ProductCard = ({ product, onIncrement, onDecrement, onRemove }) => {
+  const [isModalOpen, setModalOpen] = useState(false);
+
+  const handleOpenModal = () => {
+    setModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+  };
+
   return (
     <div className="bg-white p-4 rounded-lg shadow-md">
       <img
@@ -29,7 +41,7 @@ const ProductCard = ({ product, onIncrement, onDecrement, onRemove }) => {
             </button>
             <button
               onClick={onIncrement}
-              className="text-base  border-none btn-primary bg-black  text-white btn btn-xs"
+              className="text-base border-none btn-primary bg-black text-white btn btn-xs"
             >
               <BiPlus />
             </button>
@@ -47,11 +59,20 @@ const ProductCard = ({ product, onIncrement, onDecrement, onRemove }) => {
             Total: <b>{formatPrice(product.total)}</b>
           </p>
 
-          <button className="btn-secondary btn btn-xs capitalize hover:bg-primary hover:text-white">
-            contact farmer
+          {/* Contact Farmer Button */}
+          <button
+            onClick={handleOpenModal}
+            className="btn-secondary btn btn-xs capitalize hover:bg-primary hover:text-white"
+          >
+            Contact Farmer
           </button>
         </div>
       </div>
+
+      {/* Contact Farmer Modal */}
+      {isModalOpen && (
+        <ContactFarmerModal product={product} closeModal={handleCloseModal} />
+      )}
     </div>
   );
 };
