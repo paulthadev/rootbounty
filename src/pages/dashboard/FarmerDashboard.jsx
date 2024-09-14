@@ -88,20 +88,26 @@ const FarmerDashboard = () => {
         nf_calories,
         nf_cholesterol,
         nf_dietary_fiber,
-        nf_protein,
         nf_total_fat,
-        nf_total_carbohydrate,
         serving_weight_grams,
+        nf_potassium,
+        nf_saturated_fat,
+        nf_sodium,
+        nf_sugars,
+        nf_protein,
       } = food;
 
       return {
         nf_calories,
         nf_cholesterol,
         nf_dietary_fiber,
-        nf_protein,
         nf_total_fat,
-        nf_total_carbohydrate,
         serving_weight_grams,
+        nf_potassium,
+        nf_saturated_fat,
+        nf_sodium,
+        nf_sugars,
+        nf_protein,
       };
     });
   };
@@ -218,30 +224,36 @@ const FarmerDashboard = () => {
                 nf_calories,
                 nf_cholesterol,
                 nf_dietary_fiber,
+                nf_total_fat,
+                serving_weight_grams,
                 nf_potassium,
                 nf_saturated_fat,
                 nf_sodium,
                 nf_sugars,
                 nf_protein,
-                nf_total_fat,
-                nf_total_carbohydrate,
-                serving_weight_grams,
-                serving_qty,
+                serving_qty, // Added this to display Serving Quantity
               } = food;
               return (
-                <li key={index} className="text-sm text-gray-800 pl-3">
+                <li
+                  key={index}
+                  className=" grid grid-cols-2 text-sm text-gray-800 pl-3"
+                >
                   <div className="font-semibold text-black">
                     Serving Weight: {serving_weight_grams} g
-                    <br />
-                    Serving Quantity: {serving_qty}
                   </div>
 
+                  <div>Serving Quantity: {serving_qty}</div>
                   <div>Calories: {nf_calories} kcal</div>
                   <div>Cholesterol: {nf_cholesterol} mg</div>
                   <div>Dietary Fiber: {nf_dietary_fiber} g</div>
                   <div>Protein: {nf_protein} g</div>
-                  <div>Total Fat: {nf_total_fat} g</div>
-                  <div>Total Carbohydrate: {nf_total_carbohydrate} g</div>
+                  <div>Saturated Fat: {nf_saturated_fat} g</div>
+                  <div>Sugars: {nf_sugars} g</div>
+                  <div>Potassium: {nf_potassium} mg</div>
+                  <div>Sodium: {nf_sodium} mg</div>
+                  <div className="font-semibold text-black">
+                    Total Fat: {nf_total_fat} g
+                  </div>
                 </li>
               );
             })}
