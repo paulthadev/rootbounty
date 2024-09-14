@@ -23,19 +23,19 @@ const ProductCard = ({ product, onIncrement, onDecrement, onRemove }) => {
           <div className="flex gap-2 items-center">
             <button
               onClick={onDecrement}
-              className="text-base bg-black text-white btn btn-xs btn-primary"
+              className="text-base bg-black border-none text-white btn btn-xs btn-primary"
             >
               <BsDash />
             </button>
             <button
               onClick={onIncrement}
-              className="text-base  btn-primary bg-black  text-white btn btn-xs"
+              className="text-base  border-none  btn-primary bg-black  text-white btn btn-xs"
             >
               <BiPlus />
             </button>
             <button
               onClick={onRemove}
-              className="text-base btn-primary bg-red-500 text-white btn btn-xs"
+              className="text-base btn-primary border-none bg-red-500 text-white btn btn-xs"
             >
               <BsTrash2 />
             </button>
