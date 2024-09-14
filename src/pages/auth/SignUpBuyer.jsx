@@ -64,7 +64,6 @@ function RegisterSection() {
     phone: "",
     password: "",
     confirmPassword: "",
-    businessName: "",
   });
 
   const handleChange = (e) => {
@@ -107,7 +106,6 @@ function RegisterSection() {
         lastname: formData.lastname,
         email: formData.email,
         phone: formData.phone,
-        business_name: formData.businessName,
       },
     ]);
 
@@ -125,7 +123,6 @@ function RegisterSection() {
         phone: "",
         password: "",
         confirmPassword: "",
-        businessName: "", // Reset businessName as well
       });
     }
     setIsLoading(false);
@@ -154,14 +151,6 @@ function RegisterSection() {
           placeholder="Last Name"
           name="lastname"
           value={formData.lastname}
-          onChange={handleChange}
-        />
-
-        <Inputs
-          type="text"
-          placeholder="Business Name"
-          name="businessName"
-          value={formData.businessName}
           onChange={handleChange}
         />
 
