@@ -145,8 +145,8 @@ const FarmerDashboard = () => {
 
     console.log(files);
 
-    if (files.length < 1 || files.length > 5) {
-      toast.error("Please select between 1 to 5 images.");
+    if (files.length < 2 || files.length > 5) {
+      toast.error("Please select between 2 to 5 images.");
       return;
     }
 
@@ -206,10 +206,11 @@ const FarmerDashboard = () => {
           onChange={(e) => setPrice(e.target.value)}
         />
         <Inputs
-          type="text"
+          type="textarea"
           placeholder="Cultural values or historical information."
           value={cultural}
           onChange={(e) => setCultural(e.target.value)}
+          rows={4}
         />
 
         {/* File upload */}
@@ -219,6 +220,7 @@ const FarmerDashboard = () => {
             accept="image/*"
             multiple
             onChange={handleFileChange}
+            className="file-input w-full max-w-2xl file-input-bordered file-input-primary text-gray-700"
           />
         </div>
 
