@@ -77,7 +77,7 @@ const router = createBrowserRouter([
         element: <BuyerDashboard />,
       },
       {
-        path: "buyer/:productName",
+        path: "buyer/:productId",
         element: <SingleProduct />,
       },
       {

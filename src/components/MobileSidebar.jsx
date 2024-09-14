@@ -5,7 +5,6 @@ import LogoutModal from "./dashboard/LogoutModal";
 import { handleLogout } from "../utils/logout";
 import useCurrentUser from "../hooks/useCurrentUser";
 import { useSelector } from "react-redux";
-import { FaTimes } from "react-icons/fa";
 
 const MobileSidebar = () => {
   const { userData } = useCurrentUser();
@@ -21,14 +20,13 @@ const MobileSidebar = () => {
   };
 
   const { openSidebar } = useSelector((store) => store.general);
-  console.log(openSidebar);
 
   const links = userData?.user_type === "buyer" ? buyerlinks : farmerlinks;
 
   return (
     <>
       {openSidebar && (
-        <section className="bg-[#4CAF50CF] z-20 h-screen fixed top-0 right-0 w-[40vw]">
+        <section className="bg-[#4CAF50] z-20 h-screen fixed top-0 right-0 w-[40vw]">
           <div>
             <nav className="flex pt-[1.6rem] bg-[#4CAF50]">
               <Link to="/">

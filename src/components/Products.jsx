@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import potatoe from "/potatoe.png";
 import Spinner from "./Spinner";
 import { supabase } from "../utils/supabase";
 import { useEffect, useState } from "react";
@@ -10,8 +9,6 @@ const Products = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  console.log(products);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -44,7 +41,7 @@ const Products = () => {
             product_name,
             product_id,
             location,
-            image,
+            images,
             business_name,
             price,
             created_at,
@@ -58,29 +55,37 @@ const Products = () => {
                   <h2 className="font-bold text-[#1E1E1E] capitalize text-[1.25rem]">
                     {business_name}
                   </h2>
-                  <p className="text-[.625rem] max-w-[11rem] ">{location}</p>
+                  <p className="text-[.625rem] max-w-[11rem]">{location}</p>
                 </div>
 
                 <p className="text-[.625rem] xs:text-[.75rem] font-semibold">
                   {formatDate(created_at)}
                 </p>
               </div>
-              <Link to={`${product_name}`}>
-                <img src={potatoe} alt="" className="w-[100%]" />
+
+              <Link to={`${product_id}`}>
+                <img
+                  src={images[0]}
+                  alt=""
+                  className="w-[100%] h-[232px] rounded-lg  max-w-full object-cover"
+                />
               </Link>
 
               <div className="flex justify-between mt-4 items-center">
-                <h2 className="uppercase text-[1.2rem] md:text-[1.5rem] text-[#1E1E1E] font-bold">
-                  {product_name}{" "}
-                </h2>
+                <Link to={`${product_id}`}>
+                  <h2 className="uppercase text-[1.2rem] md:text-base text-[#1E1E1E] font-bold">
+                    {product_name}{" "}
+                  </h2>
+                </Link>
                 <p className="text-[.925rem] font-semibold">
                   {formatPrice(price)}
                 </p>
               </div>
 
               <p className="mb-4">
-                {description}
-                <Link to={`${product_name}`}>
+                {description.split(" ").slice(0, 20).join(" ")}
+                {description.split(" ").length > 20 && "..."}
+                <Link to={`${product_id}`}>
                   <span className="text-[#4CAF50]"> see more</span>
                 </Link>
               </p>

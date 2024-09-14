@@ -1,31 +1,39 @@
+import toast from "react-hot-toast";
 import { supabase } from "./supabase";
 
-const uploadImage = async (file, path) => {
+const uploadImage = async (file) => {
+  const fileName = `${Date.now()}_${file.name
+    .replace(/\s+/g, "_")
+    .replace(/[^a-zA-Z0-9_.]/g, "")}`;
+  const filePath = `${fileName}`;
+
   try {
-    const { error } = await supabase.storage
+    // Upload the image to Supabase storage
+    // eslint-disable-next-line no-unused-vars
+    const { data, error } = await supabase.storage
       .from("product-images")
-      .upload(path, file, {
-        cacheControl: "3600",
-        upsert: true,
-      });
+      .upload(filePath, file);
 
     if (error) {
-      console.error("Upload error:", error);
+      console.error("Upload error:", error, { fileName, filePath });
       throw error;
     }
 
-    const { data: publicUrlData, error: urlError } = supabase.storage
+    // Get the public URL of the uploaded image
+    const { data: publicData, error: urlError } = supabase.storage
       .from("product-images")
-      .getPublicUrl(path);
+      .getPublicUrl(filePath);
 
-    if (urlError) {
-      console.error("Public URL error:", urlError);
-      throw urlError;
+    if (!publicData || urlError) {
+      console.error("URL generation error:", urlError);
+      throw new Error(`Failed to get public URL for file: ${fileName}`);
     }
 
-    return publicUrlData.publicUrl;
+    // Return the public URL of the image
+    return publicData.publicUrl;
   } catch (error) {
-    console.error("Error uploading image:", error.message);
+    console.error("Error uploading image:", error, { fileName, filePath });
+    toast.error(`Failed to upload image: ${error.message}`);
     return null;
   }
 };
