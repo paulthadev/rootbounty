@@ -11,6 +11,8 @@ const Products = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  console.log(products);
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -43,7 +45,7 @@ const Products = () => {
             product_id,
             location,
             image,
-            company_name,
+            business_name,
             price,
             created_at,
             description,
@@ -54,7 +56,7 @@ const Products = () => {
               <div className="flex justify-between items-center mt-[3rem] mb-[1.69rem]">
                 <div className="">
                   <h2 className="font-bold text-[#1E1E1E] capitalize text-[1.25rem]">
-                    {company_name}
+                    {business_name}
                   </h2>
                   <p className="text-[.625rem] max-w-[11rem] ">{location}</p>
                 </div>
@@ -69,7 +71,7 @@ const Products = () => {
 
               <div className="flex justify-between mt-4 items-center">
                 <h2 className="uppercase text-[1.2rem] md:text-[1.5rem] text-[#1E1E1E] font-bold">
-                  {product_name}
+                  {product_name}{" "}
                 </h2>
                 <p className="text-[.925rem] font-semibold">
                   {formatPrice(price)}

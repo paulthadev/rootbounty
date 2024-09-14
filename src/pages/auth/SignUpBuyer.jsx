@@ -114,7 +114,7 @@ function RegisterSection() {
       toast.error(`Profile creation failed: ${insertError.message}`);
       setIsLoading(false);
     } else {
-      toast.success("Account created successfully!");
+      toast.success("Buyer Account created successfully!");
       navigate("/login");
       setFormData({
         firstname: "",
