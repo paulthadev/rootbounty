@@ -57,7 +57,9 @@ function RegisterSection() {
     phone: "",
     businessName: "",
     password: "",
+    location: "",
     confirmPassword: "",
+    tuber: [],
   });
 
   const handleChange = (e) => {
@@ -68,9 +70,23 @@ function RegisterSection() {
     }));
   };
 
+  const handleTuberChange = (e) => {
+    const { value, checked } = e.target;
+    setFormData((prevData) => {
+      // Add or remove the tuber based on whether it's checked
+      const updatedTubers = checked
+        ? [...prevData.tuber, value] // Add the tuber if checked
+        : prevData.tuber.filter((tuber) => tuber !== value); // Remove the tuber if unchecked
+
+      return {
+        ...prevData,
+        tuber: updatedTubers,
+      };
+    });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     setIsLoading(true);
 
     if (formData.password !== formData.confirmPassword) {
@@ -80,10 +96,7 @@ function RegisterSection() {
     }
 
     try {
-      setIsLoading(true);
-
-      // Step 1: Register the user and store the password securely using Supabase Auth
-
+      // Step 1: Register the user with Supabase Auth
       // eslint-disable-next-line no-unused-vars
       const { user, error: authError } = await supabase.auth.signUp({
         email: formData.email,
@@ -92,23 +105,25 @@ function RegisterSection() {
 
       if (authError) {
         toast.error(`Registration failed: ${authError.message}`);
-
         setIsLoading(false);
         return;
       }
 
-      // Step 2: If user is successfully created, insert buyer data into the 'buyer' table
-
+      // Step 2: Insert buyer/farmer data into the 'farmer' table
       // eslint-disable-next-line no-unused-vars
-      const { data, error: insertError } = await supabase.from("buyer").insert([
-        {
-          firstname: formData.firstname,
-          lastname: formData.lastname,
-          email: formData.email,
-          phone: formData.phone,
-          business_name: formData.businessName,
-        },
-      ]);
+      const { data, error: insertError } = await supabase
+        .from("farmer")
+        .insert([
+          {
+            firstname: formData.firstname,
+            lastname: formData.lastname,
+            email: formData.email,
+            phone: formData.phone,
+            business_name: formData.businessName,
+            tuber: formData.tuber,
+            location: formData.location,
+          },
+        ]);
 
       if (insertError) {
         toast.error(`Profile creation failed: ${insertError.message}`);
@@ -125,13 +140,12 @@ function RegisterSection() {
         businessName: "",
         password: "",
         confirmPassword: "",
+        tuber: [],
+        location: "",
       });
-
       setIsLoading(false);
     } catch (error) {
-      toast.error(
-        `An unexpected error occurred. Please try again., ${error.message}`
-      );
+      toast.error(`An unexpected error occurred: ${error.message}`);
       setIsLoading(false);
     }
   };
@@ -164,9 +178,95 @@ function RegisterSection() {
 
         <Inputs
           type="text"
-          placeholder="Business Name"
+          placeholder="Business Name/ Farm Name"
           name="businessName"
           value={formData.businessName}
+          onChange={handleChange}
+        />
+
+        {/* Select input for tubers */}
+        <div className="px-2">
+          <label className="text-black font-semibold">Tubers You Grow</label>
+          <div className="grid grid-cols-2 gap-2">
+            <label className="flex items-center">
+              <input
+                className="checkbox checkbox-primary checkbox-xs"
+                type="checkbox"
+                value="yam"
+                checked={formData.tuber.includes("yam")}
+                onChange={handleTuberChange}
+              />
+              <span className="ml-2">Yam</span>
+            </label>
+            <label className="flex items-center">
+              <input
+                className="checkbox checkbox-primary checkbox-xs"
+                type="checkbox"
+                value="cassava"
+                checked={formData.tuber.includes("cassava")}
+                onChange={handleTuberChange}
+              />
+              <span className="ml-2">Cassava</span>
+            </label>
+            <label className="flex items-center">
+              <input
+                className="checkbox checkbox-primary checkbox-xs"
+                type="checkbox"
+                value="potato"
+                checked={formData.tuber.includes("potato")}
+                onChange={handleTuberChange}
+              />
+              <span className="ml-2">Potato</span>
+            </label>
+            <label className="flex items-center">
+              <input
+                className="checkbox checkbox-primary checkbox-xs"
+                type="checkbox"
+                value="sweet potato"
+                checked={formData.tuber.includes("sweet potato")}
+                onChange={handleTuberChange}
+              />
+              <span className="ml-2">Sweet Potato</span>
+            </label>
+            <label className="flex items-center">
+              <input
+                className="checkbox checkbox-primary checkbox-xs"
+                type="checkbox"
+                value="tumeric"
+                checked={formData.tuber.includes("tumeric")}
+                onChange={handleTuberChange}
+              />
+              <span className="ml-2">Tumeric</span>
+            </label>
+            <label className="flex items-center">
+              <input
+                className="checkbox checkbox-primary checkbox-xs"
+                type="checkbox"
+                value="garlic"
+                checked={formData.tuber.includes("garlic")}
+                onChange={handleTuberChange}
+              />
+              <span className="ml-2">Garlic</span>
+            </label>
+
+            <label className="flex items-center">
+              <input
+                className="checkbox checkbox-primary checkbox-xs"
+                type="checkbox"
+                value="ginger"
+                checked={formData.tuber.includes("ginger")}
+                onChange={handleTuberChange}
+              />
+              <span className="ml-2">Ginger</span>
+            </label>
+          </div>
+        </div>
+
+        <Inputs
+          type="text"
+          placeholder="Farm Location / Farm Address"
+          name="location"
+          value={formData.location}
           onChange={handleChange}
         />
 
