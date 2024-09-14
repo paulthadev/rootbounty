@@ -16,9 +16,10 @@ const FarmerDashboard = () => {
   const [description, setDescription] = useState("");
   const [cultural, setCultural] = useState("");
   const [price, setPrice] = useState("");
-  const [selectedTuberTypes, setSelectedTuberTypes] = useState([]);
+  const [selectedTuberType, setSelectedTuberType] = useState(null); // Change to single value
   const [nutritionalInfo, setNutritionalInfo] = useState([]);
   const [healthBenefits, setHealthBenefits] = useState([]);
+  const [typingTimeout, setTypingTimeout] = useState(null);
 
   useEffect(() => {
     if (!loading && userData) {
@@ -30,7 +31,17 @@ const FarmerDashboard = () => {
 
   useEffect(() => {
     if (productName) {
-      fetchProductDetails(productName);
+      // Clear previous timeout if exists
+      if (typingTimeout) {
+        clearTimeout(typingTimeout);
+      }
+
+      // Set a new timeout to fetch product details after 500ms
+      const newTimeout = setTimeout(() => {
+        fetchProductDetails(productName);
+      }, 1500);
+
+      setTypingTimeout(newTimeout);
     } else {
       setNutritionalInfo([]);
       setHealthBenefits([]);
@@ -42,7 +53,10 @@ const FarmerDashboard = () => {
       const nutritionixHost = import.meta.env.VITE_NUTRITIONIX_HOST;
       const response = await axios.post(
         `${nutritionixHost}/v2/natural/nutrients`,
-        { query: name },
+        {
+          query: name,
+          use_raw_foods: true,
+        },
         {
           headers: {
             "x-app-id": import.meta.env.VITE_NUTRITIONIX_APP_ID,
@@ -53,6 +67,7 @@ const FarmerDashboard = () => {
       );
 
       const nutritionData = response.data;
+      console.log(nutritionData);
       setNutritionalInfo(nutritionData.foods || []);
 
       // Example API request for health benefits
@@ -92,12 +107,7 @@ const FarmerDashboard = () => {
   };
 
   const handleTuberChange = (e) => {
-    const value = e.target.value;
-    setSelectedTuberTypes((prevSelected) =>
-      prevSelected.includes(value)
-        ? prevSelected.filter((tuber) => tuber !== value)
-        : [...prevSelected, value]
-    );
+    setSelectedTuberType(e.target.value);
   };
 
   const handlePostProduct = async (e) => {
@@ -120,7 +130,7 @@ const FarmerDashboard = () => {
             location: userData?.location,
             farmer_id: userData?.farmer_id,
             business_name: userData?.business_name,
-            tuber_type: selectedTuberTypes,
+            tuber_type: selectedTuberType,
             nutrition: extractNutritionalInfo(nutritionalInfo),
             health: healthBenefits,
           },
@@ -143,7 +153,7 @@ const FarmerDashboard = () => {
       setPrice("");
       setFiles([]);
       setCultural("");
-      setSelectedTuberTypes([]);
+      setSelectedTuberType(null);
       setNutritionalInfo([]);
       setHealthBenefits([]);
     } catch (error) {
@@ -166,15 +176,15 @@ const FarmerDashboard = () => {
         <div className="p-2 flex items-center gap-x-4">
           <label className="block font-medium text-xl">Tuber type:</label>
           {userData?.tuber?.map((tuber) => (
-            <div key={tuber} className="flex items-center ">
+            <div key={tuber} className="flex items-center">
               <input
-                type="checkbox"
+                type="radio"
                 value={tuber}
-                checked={selectedTuberTypes.includes(tuber)}
+                checked={selectedTuberType === tuber}
                 onChange={handleTuberChange}
-                className="mr-2 checkbox checkbox-primary checkbox-sm"
+                className="mr-2 radio radio-primary"
               />
-              <label className="text-gray-600 capitalize">{tuber} </label>
+              <label className="text-gray-600 capitalize">{tuber}</label>
             </div>
           ))}
         </div>
@@ -208,6 +218,10 @@ const FarmerDashboard = () => {
                 nf_calories,
                 nf_cholesterol,
                 nf_dietary_fiber,
+                nf_potassium,
+                nf_saturated_fat,
+                nf_sodium,
+                nf_sugars,
                 nf_protein,
                 nf_total_fat,
                 nf_total_carbohydrate,
@@ -216,13 +230,13 @@ const FarmerDashboard = () => {
               } = food;
               return (
                 <li key={index} className="text-sm text-gray-800 pl-3">
-                  <div className=" font-semibold text-black">
+                  <div className="font-semibold text-black">
                     Serving Weight: {serving_weight_grams} g
                     <br />
-                    Serving Quantity:{serving_qty}
+                    Serving Quantity: {serving_qty}
                   </div>
 
-                  <div>Calories:{nf_calories} kcal</div>
+                  <div>Calories: {nf_calories} kcal</div>
                   <div>Cholesterol: {nf_cholesterol} mg</div>
                   <div>Dietary Fiber: {nf_dietary_fiber} g</div>
                   <div>Protein: {nf_protein} g</div>
