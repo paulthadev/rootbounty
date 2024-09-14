@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import toast from "react-hot-toast";
+import axios from "axios";
 import useCurrentUser from "../../hooks/useCurrentUser";
 import { supabase } from "../../utils/supabase";
 import Inputs from "../../components/Inputs";
@@ -9,15 +10,15 @@ const FarmerDashboard = () => {
   const navigate = useNavigate();
   const { userData, loading } = useCurrentUser();
 
-  console.log(userData);
-
   const [files, setFiles] = useState([]);
   const [uploading, setUploading] = useState(false);
   const [productName, setProductName] = useState("");
   const [description, setDescription] = useState("");
-  const [nutrition, setNutrition] = useState("");
+  const [cultural, setCultural] = useState("");
   const [price, setPrice] = useState("");
-  const [selectedTuberTypes, setSelectedTuberTypes] = useState([]);
+  const [selectedTuberType, setSelectedTuberType] = useState(null); // Change to single value
+  const [nutritionalInfo, setNutritionalInfo] = useState([]);
+  const [healthBenefits, setHealthBenefits] = useState([]);
 
   useEffect(() => {
     if (!loading && userData) {
@@ -25,35 +26,82 @@ const FarmerDashboard = () => {
         navigate("/dashboard");
       }
     }
-
-    if (!loading && !userData) {
-      toast.error("User is not properly authenticated.");
-      navigate("/login"); // Redirect to login page
-    }
-  }, [userData, loading, navigate]);
+  }, [loading, userData, navigate]);
 
   useEffect(() => {
-    if (userData?.tuber) {
-      setSelectedTuberTypes(userData.tuber);
+    if (selectedTuberType) {
+      fetchProductDetails(selectedTuberType);
+    } else {
+      setNutritionalInfo([]);
+      setHealthBenefits([]);
     }
-  }, [userData?.tuber]);
+  }, [selectedTuberType]);
+
+  const fetchProductDetails = async (tuberType) => {
+    try {
+      const nutritionixHost = import.meta.env.VITE_NUTRITIONIX_HOST;
+      const response = await axios.post(
+        `${nutritionixHost}/v2/natural/nutrients`,
+        {
+          query: tuberType,
+          use_raw_foods: true,
+        },
+        {
+          headers: {
+            "x-app-id": import.meta.env.VITE_NUTRITIONIX_APP_ID,
+            "x-app-key": import.meta.env.VITE_NUTRITIONIX_APP_KEY,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      const nutritionData = response.data;
+      console.log(nutritionData);
+      setNutritionalInfo(nutritionData.foods || []);
+
+      // Fetch health benefits if needed
+      // const benefitsResponse = await axios.get(
+      //   `https://api.example.com/health-benefits?tuberType=${tuberType}`
+      // );
+      // const benefitsData = benefitsResponse.data;
+      // setHealthBenefits(benefitsData);
+    } catch (error) {
+      console.error("Error fetching product details:", error);
+      toast.error("Failed to fetch product details.");
+    }
+  };
+
+  const extractNutritionalInfo = (foods) => {
+    if (foods.length === 0) return null;
+
+    const food = foods[0]; // Assuming we're only dealing with one food item
+    return {
+      serving_weight_grams: food.serving_weight_grams,
+      serving_qty: food.serving_qty,
+      calories: food.nf_calories,
+      cholesterol: food.nf_cholesterol,
+      dietary_fiber: food.nf_dietary_fiber,
+      protein: food.nf_protein,
+      saturated_fat: food.nf_saturated_fat,
+      sugars: food.nf_sugars,
+      potassium: food.nf_potassium,
+      sodium: food.nf_sodium,
+      total_fat: food.nf_total_fat,
+    };
+  };
 
   const handleTuberChange = (e) => {
-    const value = e.target.value;
-    setSelectedTuberTypes((prevSelected) =>
-      prevSelected.includes(value)
-        ? prevSelected.filter((tuber) => tuber !== value)
-        : [...prevSelected, value]
-    );
+    setSelectedTuberType(e.target.value);
   };
 
   const handlePostProduct = async (e) => {
     e.preventDefault();
 
-    // Skip image upload logic
     const imageUrls = []; // No images provided
 
     try {
+      const nutritionalData = extractNutritionalInfo(nutritionalInfo);
+
       const { data, error } = await supabase
         .from("product")
         .insert([
@@ -63,11 +111,13 @@ const FarmerDashboard = () => {
             price: price,
             images: imageUrls,
             created_at: new Date().toISOString(),
-            nutrition: nutrition,
+            cultural: cultural,
             location: userData?.location,
             farmer_id: userData?.farmer_id,
             business_name: userData?.business_name,
-            tuber_type: selectedTuberTypes, // Use the new column name
+            tuber_type: selectedTuberType,
+            nutrition: nutritionalData,
+            health: healthBenefits,
           },
         ])
         .select();
@@ -87,8 +137,10 @@ const FarmerDashboard = () => {
       setDescription("");
       setPrice("");
       setFiles([]);
-      setNutrition("");
-      setSelectedTuberTypes([]);
+      setCultural("");
+      setSelectedTuberType(null);
+      setNutritionalInfo([]);
+      setHealthBenefits([]);
     } catch (error) {
       console.error("Error posting product:", error);
       toast.error(`Error posting product: ${error.message}`);
@@ -105,6 +157,23 @@ const FarmerDashboard = () => {
           value={productName}
           onChange={(e) => setProductName(e.target.value)}
         />
+
+        <div className="p-2 flex items-center gap-x-4">
+          <label className="block font-medium text-xl">Tuber type:</label>
+          {userData?.tuber?.map((tuber) => (
+            <div key={tuber} className="flex items-center">
+              <input
+                type="radio"
+                value={tuber}
+                checked={selectedTuberType === tuber}
+                onChange={handleTuberChange}
+                className="mr-2 radio radio-primary"
+              />
+              <label className="text-gray-600 capitalize">{tuber}</label>
+            </div>
+          ))}
+        </div>
+
         <Inputs
           type="textarea"
           placeholder="Description"
@@ -120,33 +189,79 @@ const FarmerDashboard = () => {
         />
         <Inputs
           type="text"
-          placeholder="Nutritional Information"
-          value={nutrition}
-          onChange={(e) => setNutrition(e.target.value)}
+          placeholder="Cultural values or historical information."
+          value={cultural}
+          onChange={(e) => setCultural(e.target.value)}
         />
 
+        {/* Display nutritional info */}
         <div className="px-2 mt-4">
-          <label className="block font-medium text-gray-700">
-            Select Tuber Types:
-          </label>
-          {userData?.tuber?.map((tuber) => (
-            <div key={tuber} className="flex items-center mt-2">
-              <input
-                type="checkbox"
-                value={tuber}
-                checked={selectedTuberTypes.includes(tuber)}
-                onChange={handleTuberChange}
-                className="mr-2 checkbox checkbox-primary checkbox-xs"
-              />
-              <label className="text-sm text-gray-600">{tuber}</label>
-            </div>
-          ))}
+          <h2 className="text-lg font-semibold">Nutritional Information</h2>
+          {nutritionalInfo.length > 0 && (
+            <ul className="grid grid-cols-2 text-sm text-gray-800 pl-3">
+              <li>
+                <span className="font-semibold">Serving Weight:</span>{" "}
+                {nutritionalInfo[0].serving_weight_grams} g
+              </li>
+              <li>
+                <span className="font-semibold">Serving Quantity:</span>{" "}
+                {nutritionalInfo[0].serving_qty}
+              </li>
+              <li>
+                <span className="font-semibold">Calories:</span>{" "}
+                {nutritionalInfo[0].nf_calories} kcal
+              </li>
+              <li>
+                <span className="font-semibold">Cholesterol:</span>{" "}
+                {nutritionalInfo[0].nf_cholesterol} mg
+              </li>
+              <li>
+                <span className="font-semibold">Dietary Fiber:</span>{" "}
+                {nutritionalInfo[0].nf_dietary_fiber} g
+              </li>
+              <li>
+                <span className="font-semibold">Protein:</span>{" "}
+                {nutritionalInfo[0].nf_protein} g
+              </li>
+              <li>
+                <span className="font-semibold">Saturated Fat:</span>{" "}
+                {nutritionalInfo[0].nf_saturated_fat} g
+              </li>
+              <li>
+                <span className="font-semibold">Sugars:</span>{" "}
+                {nutritionalInfo[0].nf_sugars} g
+              </li>
+              <li>
+                <span className="font-semibold">Potassium:</span>{" "}
+                {nutritionalInfo[0].nf_potassium} mg
+              </li>
+              <li>
+                <span className="font-semibold">Sodium:</span>{" "}
+                {nutritionalInfo[0].nf_sodium} mg
+              </li>
+              <li>
+                <span className="font-semibold">Total Fat:</span>{" "}
+                {nutritionalInfo[0].nf_total_fat} g
+              </li>
+            </ul>
+          )}
         </div>
 
-        {/* Image upload input can be omitted for this test */}
+        {/* Display health benefits */}
+        <div className="px-2 mt-4">
+          <h2 className="text-lg font-semibold">Health Benefits</h2>
+          <ul>
+            {healthBenefits.map((benefit, index) => (
+              <li key={index} className="text-sm text-gray-600">
+                {benefit}
+              </li>
+            ))}
+          </ul>
+        </div>
+
         <div className="px-2">
           <button
-            className="btn btn-primary btn-sm text-base mt-2"
+            className="btn btn-primary btn-sm text-base text-white mt-2"
             disabled={uploading}
           >
             {uploading ? "Uploading..." : "Post Product"}
