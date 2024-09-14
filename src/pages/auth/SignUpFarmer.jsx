@@ -58,6 +58,7 @@ function RegisterSection() {
     businessName: "",
     password: "",
     confirmPassword: "",
+    tuber: [],
   });
 
   const handleChange = (e) => {
@@ -68,9 +69,19 @@ function RegisterSection() {
     }));
   };
 
+  const handleTuberChange = (e) => {
+    const selectedTubers = Array.from(
+      e.target.selectedOptions,
+      (option) => option.value
+    );
+    setFormData((prevData) => ({
+      ...prevData,
+      tuber: selectedTubers,
+    }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     setIsLoading(true);
 
     if (formData.password !== formData.confirmPassword) {
@@ -80,11 +91,7 @@ function RegisterSection() {
     }
 
     try {
-      setIsLoading(true);
-
-      // Step 1: Register the user and store the password securely using Supabase Auth
-
-      // eslint-disable-next-line no-unused-vars
+      // Step 1: Register the user with Supabase Auth
       const { user, error: authError } = await supabase.auth.signUp({
         email: formData.email,
         password: formData.password,
@@ -92,23 +99,23 @@ function RegisterSection() {
 
       if (authError) {
         toast.error(`Registration failed: ${authError.message}`);
-
         setIsLoading(false);
         return;
       }
 
-      // Step 2: If user is successfully created, insert buyer data into the 'buyer' table
-
-      // eslint-disable-next-line no-unused-vars
-      const { data, error: insertError } = await supabase.from("buyer").insert([
-        {
-          firstname: formData.firstname,
-          lastname: formData.lastname,
-          email: formData.email,
-          phone: formData.phone,
-          business_name: formData.businessName,
-        },
-      ]);
+      // Step 2: Insert buyer/farmer data into the 'farmer' table
+      const { data, error: insertError } = await supabase
+        .from("farmer")
+        .insert([
+          {
+            firstname: formData.firstname,
+            lastname: formData.lastname,
+            email: formData.email,
+            phone: formData.phone,
+            business_name: formData.businessName,
+            tuber: formData.tuber,
+          },
+        ]);
 
       if (insertError) {
         toast.error(`Profile creation failed: ${insertError.message}`);
@@ -125,13 +132,11 @@ function RegisterSection() {
         businessName: "",
         password: "",
         confirmPassword: "",
+        tuber: [],
       });
-
       setIsLoading(false);
     } catch (error) {
-      toast.error(
-        `An unexpected error occurred. Please try again., ${error.message}`
-      );
+      toast.error(`An unexpected error occurred: ${error.message}`);
       setIsLoading(false);
     }
   };
@@ -164,8 +169,51 @@ function RegisterSection() {
 
         <Inputs
           type="text"
-          placeholder="Business Name"
+          placeholder="Business Name/ Farm Name"
           name="businessName"
+          value={formData.businessName}
+          onChange={handleChange}
+        />
+
+        {/* Select input for tubers */}
+        <div className="px-2">
+          <label htmlFor="tuber" className="text-black font-semibold">
+            Tubers You Grow
+          </label>
+          <select
+            name="tuber"
+            id="tuber"
+            multiple
+            value={formData.tuber}
+            onChange={handleTuberChange}
+            className="w-full border-2 border-gray-300 rounded-md p-2"
+          >
+            <option value="yam">Yam</option>
+            <option value="cassava">Cassava</option>
+            <option value="potato">Potato</option>
+            <option value="sweet potato">Sweet Potato</option>
+            <option value="taro">Taro</option>
+          </select>
+        </div>
+
+        {/* Display the selected tubers */}
+        <div className="px-2">
+          <h2 className="font-semibold">Selected Tubers:</h2>
+          {formData.tuber.length > 0 ? (
+            <ul className="list-disc pl-5">
+              {formData.tuber.map((tuber, index) => (
+                <li key={index}>{tuber}</li>
+              ))}
+            </ul>
+          ) : (
+            <p>No tubers selected.</p>
+          )}
+        </div>
+
+        <Inputs
+          type="text"
+          placeholder="Farm Location/ Farm Address"
+          name="location"
           value={formData.businessName}
           onChange={handleChange}
         />
