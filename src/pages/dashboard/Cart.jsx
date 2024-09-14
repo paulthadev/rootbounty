@@ -59,7 +59,7 @@ const Cart = () => {
               <p className="text-lg font-bold">₦{calculateTotalPrice()}</p>
             </div>
 
-            <button className="btn-block bg-green-500 hover:bg-green-800 text-white text-lg btn btn-primary btn-md my-4 rounded-2xl">
+            <button className="btn-block  bg-green-500 hover:bg-green-800 text-white text-lg btn btn-primary btn-md my-4 rounded-2xl">
               Checkout
             </button>
           </div>
