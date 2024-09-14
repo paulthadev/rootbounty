@@ -11,15 +11,16 @@ const FarmerDashboard = () => {
   const navigate = useNavigate();
   const { userData, loading } = useCurrentUser();
 
-  const [files, setFiles] = useState([]);
+  const [formData, setFormData] = useState({
+    files: [],
+    productName: "",
+    description: "",
+    cultural: "",
+    price: "",
+    selectedTuberType: null,
+    nutritionalInfo: [],
+  });
   const [uploading, setUploading] = useState(false);
-  const [productName, setProductName] = useState("");
-  const [description, setDescription] = useState("");
-  const [cultural, setCultural] = useState("");
-  const [price, setPrice] = useState("");
-  const [selectedTuberType, setSelectedTuberType] = useState(null);
-  const [nutritionalInfo, setNutritionalInfo] = useState([]);
-  const [healthBenefits, setHealthBenefits] = useState([]);
 
   useEffect(() => {
     if (!loading && userData) {
@@ -30,13 +31,15 @@ const FarmerDashboard = () => {
   }, [loading, userData, navigate]);
 
   useEffect(() => {
-    if (selectedTuberType) {
-      fetchProductDetails(selectedTuberType);
+    if (formData.selectedTuberType) {
+      fetchProductDetails(formData.selectedTuberType);
     } else {
-      setNutritionalInfo([]);
-      setHealthBenefits([]);
+      setFormData((prev) => ({
+        ...prev,
+        nutritionalInfo: [],
+      }));
     }
-  }, [selectedTuberType]);
+  }, [formData.selectedTuberType]);
 
   const fetchProductDetails = async (tuberType) => {
     try {
@@ -57,7 +60,10 @@ const FarmerDashboard = () => {
       );
 
       const nutritionData = response.data;
-      setNutritionalInfo(nutritionData.foods || []);
+      setFormData((prev) => ({
+        ...prev,
+        nutritionalInfo: nutritionData.foods || [],
+      }));
     } catch (error) {
       console.error("Error fetching product details:", error);
       toast.error("Failed to fetch product details.");
@@ -84,33 +90,35 @@ const FarmerDashboard = () => {
   };
 
   const handleTuberChange = (e) => {
-    setSelectedTuberType(e.target.value);
+    setFormData((prev) => ({
+      ...prev,
+      selectedTuberType: e.target.value,
+    }));
   };
 
   const handlePostProduct = async (e) => {
     e.preventDefault();
 
-    const imageUrls = files; // Now it contains URLs of uploaded images
+    const imageUrls = formData.files; // Now it contains URLs of uploaded images
 
     try {
-      const nutritionalData = extractNutritionalInfo(nutritionalInfo);
+      const nutritionalData = extractNutritionalInfo(formData.nutritionalInfo);
 
       const { data, error } = await supabase
         .from("product")
         .insert([
           {
-            product_name: productName,
-            description: description,
-            price: price,
+            product_name: formData.productName,
+            description: formData.description,
+            price: formData.price,
             images: imageUrls,
             created_at: new Date().toISOString(),
-            cultural: cultural,
+            cultural: formData.cultural,
             location: userData?.location,
             farmer_id: userData?.farmer_id,
             business_name: userData?.business_name,
-            tuber_type: selectedTuberType,
+            tuber_type: formData.selectedTuberType,
             nutrition: nutritionalData,
-            health: healthBenefits,
           },
         ])
         .select();
@@ -126,14 +134,16 @@ const FarmerDashboard = () => {
       toast.success("Product posted successfully!");
 
       // Clear fields
-      setProductName("");
-      setDescription("");
-      setPrice("");
-      setFiles([]);
-      setCultural("");
-      setSelectedTuberType(null);
-      setNutritionalInfo([]);
-      setHealthBenefits([]);
+      setFormData({
+        files: [],
+        productName: "",
+        description: "",
+        cultural: "",
+        price: "",
+        selectedTuberType: null,
+        nutritionalInfo: [],
+      });
+      document.querySelector('input[type="file"]').value = "";
     } catch (error) {
       console.error("Error posting product:", error);
       toast.error(`Error posting product: ${error.message}`);
@@ -142,8 +152,6 @@ const FarmerDashboard = () => {
 
   const handleFileChange = async (e) => {
     const files = Array.from(e.target.files);
-
-    console.log(files);
 
     if (files.length < 2 || files.length > 5) {
       toast.error("Please select between 2 to 5 images.");
@@ -156,7 +164,10 @@ const FarmerDashboard = () => {
       const uploadedUrls = await Promise.all(
         files.map((file) => uploadImage(file)) // Use your uploadImage function
       );
-      setFiles(uploadedUrls); // Set URLs instead of File objects
+      setFormData((prev) => ({
+        ...prev,
+        files: uploadedUrls, // Set URLs instead of File objects
+      }));
     } catch (error) {
       console.error("Error uploading images:", error);
       toast.error("Failed to upload images.");
@@ -172,8 +183,10 @@ const FarmerDashboard = () => {
         <Inputs
           type="text"
           placeholder="Product Name"
-          value={productName}
-          onChange={(e) => setProductName(e.target.value)}
+          value={formData.productName}
+          onChange={(e) =>
+            setFormData((prev) => ({ ...prev, productName: e.target.value }))
+          }
         />
 
         <div className="p-2 flex items-center gap-x-4">
@@ -183,7 +196,7 @@ const FarmerDashboard = () => {
               <input
                 type="radio"
                 value={tuber}
-                checked={selectedTuberType === tuber}
+                checked={formData.selectedTuberType === tuber}
                 onChange={handleTuberChange}
                 className="mr-2 radio radio-primary"
               />
@@ -195,21 +208,27 @@ const FarmerDashboard = () => {
         <Inputs
           type="textarea"
           placeholder="Description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
+          value={formData.description}
+          onChange={(e) =>
+            setFormData((prev) => ({ ...prev, description: e.target.value }))
+          }
           rows={6}
         />
         <Inputs
           type="number"
           placeholder="Price"
-          value={price}
-          onChange={(e) => setPrice(e.target.value)}
+          value={formData.price}
+          onChange={(e) =>
+            setFormData((prev) => ({ ...prev, price: e.target.value }))
+          }
         />
         <Inputs
           type="textarea"
           placeholder="Cultural values or historical information."
-          value={cultural}
-          onChange={(e) => setCultural(e.target.value)}
+          value={formData.cultural}
+          onChange={(e) =>
+            setFormData((prev) => ({ ...prev, cultural: e.target.value }))
+          }
           rows={4}
         />
 
@@ -227,51 +246,51 @@ const FarmerDashboard = () => {
         {/* Display nutritional info */}
         <div className="px-2 mt-4">
           <h2 className="text-lg font-semibold">Nutritional Information</h2>
-          {nutritionalInfo.length > 0 && (
+          {formData.nutritionalInfo.length > 0 && (
             <ul className="grid grid-cols-2 text-sm text-gray-800 pl-3">
               <li>
                 <span className="font-semibold">Serving Weight:</span>{" "}
-                {nutritionalInfo[0].serving_weight_grams} g
+                {formData.nutritionalInfo[0].serving_weight_grams} g
               </li>
               <li>
                 <span className="font-semibold">Serving Quantity:</span>{" "}
-                {nutritionalInfo[0].serving_qty}
+                {formData.nutritionalInfo[0].serving_qty}
               </li>
               <li>
                 <span className="font-semibold">Calories:</span>{" "}
-                {nutritionalInfo[0].nf_calories} kcal
+                {formData.nutritionalInfo[0].nf_calories} kcal
               </li>
               <li>
                 <span className="font-semibold">Cholesterol:</span>{" "}
-                {nutritionalInfo[0].nf_cholesterol} mg
+                {formData.nutritionalInfo[0].nf_cholesterol} mg
               </li>
               <li>
                 <span className="font-semibold">Dietary Fiber:</span>{" "}
-                {nutritionalInfo[0].nf_dietary_fiber} g
+                {formData.nutritionalInfo[0].nf_dietary_fiber} g
               </li>
               <li>
                 <span className="font-semibold">Protein:</span>{" "}
-                {nutritionalInfo[0].nf_protein} g
+                {formData.nutritionalInfo[0].nf_protein} g
               </li>
               <li>
                 <span className="font-semibold">Saturated Fat:</span>{" "}
-                {nutritionalInfo[0].nf_saturated_fat} g
+                {formData.nutritionalInfo[0].nf_saturated_fat} g
               </li>
               <li>
                 <span className="font-semibold">Sugars:</span>{" "}
-                {nutritionalInfo[0].nf_sugars} g
+                {formData.nutritionalInfo[0].nf_sugars} g
               </li>
               <li>
                 <span className="font-semibold">Potassium:</span>{" "}
-                {nutritionalInfo[0].nf_potassium} mg
+                {formData.nutritionalInfo[0].nf_potassium} mg
               </li>
               <li>
                 <span className="font-semibold">Sodium:</span>{" "}
-                {nutritionalInfo[0].nf_sodium} mg
+                {formData.nutritionalInfo[0].nf_sodium} mg
               </li>
               <li>
                 <span className="font-semibold">Total Fat:</span>{" "}
-                {nutritionalInfo[0].nf_total_fat} g
+                {formData.nutritionalInfo[0].nf_total_fat} g
               </li>
             </ul>
           )}
@@ -279,10 +298,14 @@ const FarmerDashboard = () => {
 
         <div className="px-2">
           <button
-            className="btn btn-primary btn-sm text-base text-white mt-2"
+            className="btn btn-primary btn-block  md:btn-wide text-base text-white mt-2"
             disabled={uploading}
           >
-            {uploading ? "Uploading..." : "Post Product"}
+            {uploading ? (
+              <div className="loading loading-spinner bg-primary"></div>
+            ) : (
+              "Post Product"
+            )}
           </button>
         </div>
       </form>
