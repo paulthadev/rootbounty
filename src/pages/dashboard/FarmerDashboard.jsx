@@ -18,6 +18,7 @@ const FarmerDashboard = () => {
   const [nutrition, setNutrition] = useState("");
   const [location, setLocation] = useState("");
   const [price, setPrice] = useState("");
+  const [selectedTuberTypes, setSelectedTuberTypes] = useState([]);
 
   useEffect(() => {
     if (!loading && userData) {
@@ -31,6 +32,21 @@ const FarmerDashboard = () => {
       navigate("/login"); // Redirect to login page
     }
   }, [userData, loading, navigate]);
+
+  useEffect(() => {
+    if (userData?.tuber) {
+      setSelectedTuberTypes(userData.tuber);
+    }
+  }, [userData?.tuber]);
+
+  const handleTuberChange = (e) => {
+    const value = e.target.value;
+    setSelectedTuberTypes((prevSelected) =>
+      prevSelected.includes(value)
+        ? prevSelected.filter((tuber) => tuber !== value)
+        : [...prevSelected, value]
+    );
+  };
 
   const handlePostProduct = async (e) => {
     e.preventDefault();
@@ -51,7 +67,8 @@ const FarmerDashboard = () => {
             nutrition: nutrition,
             location: userData?.location,
             farmer_id: userData?.farmer_id,
-            company_name: userData?.business_name,
+            business_name: userData?.business_name,
+            tuber_type: selectedTuberTypes, // Use the new column name
           },
         ])
         .select();
@@ -73,6 +90,7 @@ const FarmerDashboard = () => {
       setFiles([]);
       setNutrition("");
       setLocation("");
+      setSelectedTuberTypes([]);
     } catch (error) {
       console.error("Error posting product:", error);
       toast.error(`Error posting product: ${error.message}`);
@@ -109,9 +127,30 @@ const FarmerDashboard = () => {
           onChange={(e) => setNutrition(e.target.value)}
         />
 
+        <div className="px-2 mt-4">
+          <label className="block font-medium text-gray-700">
+            Select Tuber Types:
+          </label>
+          {userData?.tuber?.map((tuber) => (
+            <div key={tuber} className="flex items-center mt-2">
+              <input
+                type="checkbox"
+                value={tuber}
+                checked={selectedTuberTypes.includes(tuber)}
+                onChange={handleTuberChange}
+                className="mr-2 checkbox checkbox-primary checkbox-xs"
+              />
+              <label className="text-sm text-gray-600">{tuber}</label>
+            </div>
+          ))}
+        </div>
+
         {/* Image upload input can be omitted for this test */}
         <div className="px-2">
-          <button className="btn btn-primary btn-sm mt-2" disabled={uploading}>
+          <button
+            className="btn btn-primary btn-sm text-base mt-2"
+            disabled={uploading}
+          >
             {uploading ? "Uploading..." : "Post Product"}
           </button>
         </div>
