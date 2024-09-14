@@ -6,9 +6,8 @@ import { setOpenSidebar } from "../../features/generalSlice";
 import MobileSidebar from "../../components/MobileSidebar";
 
 const DashboardLayout = () => {
-    const { openSidebar } = useSelector((store) => store.general);
-    const dispatch = useDispatch()
-  console.log(openSidebar);
+  const { openSidebar } = useSelector((store) => store.general);
+  const dispatch = useDispatch();
 
   return (
     <section className="max-w-[90rem] mx-auto grid grid-cols-6 h-[100vh]">

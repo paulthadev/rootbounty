@@ -13,6 +13,9 @@ export default {
       "4k": "2560px",
     },
     extend: {
+      colors: {
+        primary: "#4CAF50",
+      },
       fontFamily: {
         sans: ['"Inter"', "sans-serif"],
         mono: ['"Fira Code"', "monospace"],
@@ -23,6 +26,13 @@ export default {
   plugins: [require("daisyui")],
 
   daisyui: {
-    themes: ["light"],
+    themes: [
+      "light",
+      {
+        mytheme: {
+          primary: "#4CAF50",
+        },
+      },
+    ],
   },
 };
