@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import useCurrentUser from "../../hooks/useCurrentUser";
 import { handleLogout } from "../../utils/logout";
 import { useNavigate } from "react-router";
+import Products from "../../components/Products";
 
 function BuyerDashboard() {
   const navigate = useNavigate();
@@ -18,11 +19,12 @@ function BuyerDashboard() {
 
   return (
     <div>
-      <p>Buyer Dashboard</p>
+      {/* <p>Buyer Dashboard</p>
 
       <button onClick={() => handleLogout()} className="btn btn-warning">
         logout
-      </button>
+      </button> */}
+      <Products/>
     </div>
   );
 }
