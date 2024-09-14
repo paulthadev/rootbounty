@@ -5,6 +5,7 @@ import axios from "axios";
 import useCurrentUser from "../../hooks/useCurrentUser";
 import { supabase } from "../../utils/supabase";
 import Inputs from "../../components/Inputs";
+import uploadImage from "../../utils/uploadImage";
 
 const FarmerDashboard = () => {
   const navigate = useNavigate();
@@ -16,7 +17,7 @@ const FarmerDashboard = () => {
   const [description, setDescription] = useState("");
   const [cultural, setCultural] = useState("");
   const [price, setPrice] = useState("");
-  const [selectedTuberType, setSelectedTuberType] = useState(null); // Change to single value
+  const [selectedTuberType, setSelectedTuberType] = useState(null);
   const [nutritionalInfo, setNutritionalInfo] = useState([]);
   const [healthBenefits, setHealthBenefits] = useState([]);
 
@@ -89,7 +90,7 @@ const FarmerDashboard = () => {
   const handlePostProduct = async (e) => {
     e.preventDefault();
 
-    const imageUrls = []; // No images provided
+    const imageUrls = files; // Now it contains URLs of uploaded images
 
     try {
       const nutritionalData = extractNutritionalInfo(nutritionalInfo);
@@ -139,6 +140,29 @@ const FarmerDashboard = () => {
     }
   };
 
+  const handleFileChange = async (e) => {
+    const files = Array.from(e.target.files);
+
+    if (files.length < 1 || files.length > 5) {
+      toast.error("Please select between 3 to 5 images.");
+      return;
+    }
+
+    setUploading(true);
+
+    try {
+      const uploadedUrls = await Promise.all(
+        files.map((file) => uploadImage(file)) // Use your uploadImage function
+      );
+      setFiles(uploadedUrls); // Set URLs instead of File objects
+    } catch (error) {
+      console.error("Error uploading images:", error);
+      toast.error("Failed to upload images.");
+    } finally {
+      setUploading(false);
+    }
+  };
+
   return (
     <div>
       <h1 className="p-2 text-2xl font-semibold">Add Product</h1>
@@ -185,6 +209,16 @@ const FarmerDashboard = () => {
           value={cultural}
           onChange={(e) => setCultural(e.target.value)}
         />
+
+        {/* File upload */}
+        <div className="p-2">
+          <input
+            type="file"
+            accept="image/*"
+            multiple
+            onChange={handleFileChange}
+          />
+        </div>
 
         {/* Display nutritional info */}
         <div className="px-2 mt-4">
