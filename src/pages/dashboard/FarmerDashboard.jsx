@@ -19,7 +19,6 @@ const FarmerDashboard = () => {
   const [selectedTuberType, setSelectedTuberType] = useState(null); // Change to single value
   const [nutritionalInfo, setNutritionalInfo] = useState([]);
   const [healthBenefits, setHealthBenefits] = useState([]);
-  const [typingTimeout, setTypingTimeout] = useState(null);
 
   useEffect(() => {
     if (!loading && userData) {
@@ -30,31 +29,21 @@ const FarmerDashboard = () => {
   }, [loading, userData, navigate]);
 
   useEffect(() => {
-    if (productName) {
-      // Clear previous timeout if exists
-      if (typingTimeout) {
-        clearTimeout(typingTimeout);
-      }
-
-      // Set a new timeout to fetch product details after 500ms
-      const newTimeout = setTimeout(() => {
-        fetchProductDetails(productName);
-      }, 1500);
-
-      setTypingTimeout(newTimeout);
+    if (selectedTuberType) {
+      fetchProductDetails(selectedTuberType);
     } else {
       setNutritionalInfo([]);
       setHealthBenefits([]);
     }
-  }, [productName]);
+  }, [selectedTuberType]);
 
-  const fetchProductDetails = async (name) => {
+  const fetchProductDetails = async (tuberType) => {
     try {
       const nutritionixHost = import.meta.env.VITE_NUTRITIONIX_HOST;
       const response = await axios.post(
         `${nutritionixHost}/v2/natural/nutrients`,
         {
-          query: name,
+          query: tuberType,
           use_raw_foods: true,
         },
         {
@@ -70,11 +59,11 @@ const FarmerDashboard = () => {
       console.log(nutritionData);
       setNutritionalInfo(nutritionData.foods || []);
 
-      // Example API request for health benefits
+      // Fetch health benefits if needed
       // const benefitsResponse = await axios.get(
-      //   `https://api.example.com/health-benefits?product=${name}`
+      //   `https://api.example.com/health-benefits?tuberType=${tuberType}`
       // );
-      // const benefitsData = benefitsResponse.data; // Adjust based on API response format
+      // const benefitsData = benefitsResponse.data;
       // setHealthBenefits(benefitsData);
     } catch (error) {
       console.error("Error fetching product details:", error);
@@ -83,33 +72,22 @@ const FarmerDashboard = () => {
   };
 
   const extractNutritionalInfo = (foods) => {
-    return foods.map((food) => {
-      const {
-        nf_calories,
-        nf_cholesterol,
-        nf_dietary_fiber,
-        nf_total_fat,
-        serving_weight_grams,
-        nf_potassium,
-        nf_saturated_fat,
-        nf_sodium,
-        nf_sugars,
-        nf_protein,
-      } = food;
+    if (foods.length === 0) return null;
 
-      return {
-        nf_calories,
-        nf_cholesterol,
-        nf_dietary_fiber,
-        nf_total_fat,
-        serving_weight_grams,
-        nf_potassium,
-        nf_saturated_fat,
-        nf_sodium,
-        nf_sugars,
-        nf_protein,
-      };
-    });
+    const food = foods[0]; // Assuming we're only dealing with one food item
+    return {
+      serving_weight_grams: food.serving_weight_grams,
+      serving_qty: food.serving_qty,
+      calories: food.nf_calories,
+      cholesterol: food.nf_cholesterol,
+      dietary_fiber: food.nf_dietary_fiber,
+      protein: food.nf_protein,
+      saturated_fat: food.nf_saturated_fat,
+      sugars: food.nf_sugars,
+      potassium: food.nf_potassium,
+      sodium: food.nf_sodium,
+      total_fat: food.nf_total_fat,
+    };
   };
 
   const handleTuberChange = (e) => {
@@ -119,10 +97,11 @@ const FarmerDashboard = () => {
   const handlePostProduct = async (e) => {
     e.preventDefault();
 
-    // Skip image upload logic
     const imageUrls = []; // No images provided
 
     try {
+      const nutritionalData = extractNutritionalInfo(nutritionalInfo);
+
       const { data, error } = await supabase
         .from("product")
         .insert([
@@ -137,7 +116,7 @@ const FarmerDashboard = () => {
             farmer_id: userData?.farmer_id,
             business_name: userData?.business_name,
             tuber_type: selectedTuberType,
-            nutrition: extractNutritionalInfo(nutritionalInfo),
+            nutrition: nutritionalData,
             health: healthBenefits,
           },
         ])
@@ -218,46 +197,54 @@ const FarmerDashboard = () => {
         {/* Display nutritional info */}
         <div className="px-2 mt-4">
           <h2 className="text-lg font-semibold">Nutritional Information</h2>
-          <ul>
-            {nutritionalInfo.map((food, index) => {
-              const {
-                nf_calories,
-                nf_cholesterol,
-                nf_dietary_fiber,
-                nf_total_fat,
-                serving_weight_grams,
-                nf_potassium,
-                nf_saturated_fat,
-                nf_sodium,
-                nf_sugars,
-                nf_protein,
-                serving_qty, // Added this to display Serving Quantity
-              } = food;
-              return (
-                <li
-                  key={index}
-                  className=" grid grid-cols-2 text-sm text-gray-800 pl-3"
-                >
-                  <div className="font-semibold text-black">
-                    Serving Weight: {serving_weight_grams} g
-                  </div>
-
-                  <div>Serving Quantity: {serving_qty}</div>
-                  <div>Calories: {nf_calories} kcal</div>
-                  <div>Cholesterol: {nf_cholesterol} mg</div>
-                  <div>Dietary Fiber: {nf_dietary_fiber} g</div>
-                  <div>Protein: {nf_protein} g</div>
-                  <div>Saturated Fat: {nf_saturated_fat} g</div>
-                  <div>Sugars: {nf_sugars} g</div>
-                  <div>Potassium: {nf_potassium} mg</div>
-                  <div>Sodium: {nf_sodium} mg</div>
-                  <div className="font-semibold text-black">
-                    Total Fat: {nf_total_fat} g
-                  </div>
-                </li>
-              );
-            })}
-          </ul>
+          {nutritionalInfo.length > 0 && (
+            <ul className="grid grid-cols-2 text-sm text-gray-800 pl-3">
+              <li>
+                <span className="font-semibold">Serving Weight:</span>{" "}
+                {nutritionalInfo[0].serving_weight_grams} g
+              </li>
+              <li>
+                <span className="font-semibold">Serving Quantity:</span>{" "}
+                {nutritionalInfo[0].serving_qty}
+              </li>
+              <li>
+                <span className="font-semibold">Calories:</span>{" "}
+                {nutritionalInfo[0].nf_calories} kcal
+              </li>
+              <li>
+                <span className="font-semibold">Cholesterol:</span>{" "}
+                {nutritionalInfo[0].nf_cholesterol} mg
+              </li>
+              <li>
+                <span className="font-semibold">Dietary Fiber:</span>{" "}
+                {nutritionalInfo[0].nf_dietary_fiber} g
+              </li>
+              <li>
+                <span className="font-semibold">Protein:</span>{" "}
+                {nutritionalInfo[0].nf_protein} g
+              </li>
+              <li>
+                <span className="font-semibold">Saturated Fat:</span>{" "}
+                {nutritionalInfo[0].nf_saturated_fat} g
+              </li>
+              <li>
+                <span className="font-semibold">Sugars:</span>{" "}
+                {nutritionalInfo[0].nf_sugars} g
+              </li>
+              <li>
+                <span className="font-semibold">Potassium:</span>{" "}
+                {nutritionalInfo[0].nf_potassium} mg
+              </li>
+              <li>
+                <span className="font-semibold">Sodium:</span>{" "}
+                {nutritionalInfo[0].nf_sodium} mg
+              </li>
+              <li>
+                <span className="font-semibold">Total Fat:</span>{" "}
+                {nutritionalInfo[0].nf_total_fat} g
+              </li>
+            </ul>
+          )}
         </div>
 
         {/* Display health benefits */}
