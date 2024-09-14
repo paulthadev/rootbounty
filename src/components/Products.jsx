@@ -55,7 +55,7 @@ const Products = () => {
                   <h2 className="font-bold text-[#1E1E1E] capitalize text-[1.25rem]">
                     {business_name}
                   </h2>
-                  <p className="text-[.625rem] max-w-[11rem] ">{location}</p>
+                  <p className="text-[.625rem] max-w-[11rem]">{location}</p>
                 </div>
 
                 <p className="text-[.625rem] xs:text-[.75rem] font-semibold">
