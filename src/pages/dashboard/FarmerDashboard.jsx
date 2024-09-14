@@ -16,7 +16,6 @@ const FarmerDashboard = () => {
   const [productName, setProductName] = useState("");
   const [description, setDescription] = useState("");
   const [nutrition, setNutrition] = useState("");
-  const [location, setLocation] = useState("");
   const [price, setPrice] = useState("");
   const [selectedTuberTypes, setSelectedTuberTypes] = useState([]);
 
@@ -89,7 +88,6 @@ const FarmerDashboard = () => {
       setPrice("");
       setFiles([]);
       setNutrition("");
-      setLocation("");
       setSelectedTuberTypes([]);
     } catch (error) {
       console.error("Error posting product:", error);
