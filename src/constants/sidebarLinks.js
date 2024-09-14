@@ -1,10 +1,10 @@
-const links = [
+export const links = [
   {
     subtitle: "overview",
     items: [
       {
         title: "products",
-        link: "/dashboard",
+        link: "/",
       },
       {
         title: "orders",

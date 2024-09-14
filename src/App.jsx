@@ -10,6 +10,9 @@ import BuyerDashboard from "./pages/dashboard/BuyerDashboard";
 import FarmerDashboard from "./pages/dashboard/FarmerDashboard";
 import AuthCheck from "./routes/AuthCheck";
 import ProtectedRoute from "./routes/ProtectedRoutes";
+import DashboardLayout from "./pages/dashboard/dashboardLayout";
+import Order from "./pages/dashboard/Order";
+import Cart from "./pages/dashboard/Cart";
 
 const router = createBrowserRouter([
   {
@@ -57,21 +60,39 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/buyer",
+    path: "/dashboard",
     element: (
       <ProtectedRoute>
-        <BuyerDashboard />
+        <DashboardLayout />
       </ProtectedRoute>
     ),
+
+    children: [
+      {
+        index: true,
+        element: <BuyerDashboard />,
+      },
+      {
+        path: "farmer",
+        element: (
+            <FarmerDashboard />
+        ),
+      },
+      {
+        path: "orders",
+        element: (
+          <Order />
+        ),
+      },
+      {
+        path: "cart",
+        element: (
+            <Cart />
+        ),
+      },
+    ],
   },
-  {
-    path: "/farmer",
-    element: (
-      <ProtectedRoute>
-        <FarmerDashboard />
-      </ProtectedRoute>
-    ),
-  },
+
   {
     path: "*",
     element: <NotFound />,
