@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import potatoe from "/potatoe.png";
 import Spinner from "./Spinner";
 import { supabase } from "../utils/supabase";
 import { useEffect, useState } from "react";
@@ -44,13 +43,14 @@ const Products = () => {
             product_name,
             product_id,
             location,
-            image,
+            images,
             business_name,
             price,
             created_at,
             description,
           } = product;
 
+          console.log(images);
           return (
             <article key={product_id} className="px-6 bg-white rounded-lg">
               <div className="flex justify-between items-center mt-[3rem] mb-[1.69rem]">
@@ -65,12 +65,17 @@ const Products = () => {
                   {formatDate(created_at)}
                 </p>
               </div>
+
               <Link to={`${product_name}`}>
-                <img src={potatoe} alt="" className="w-[100%]" />
+                <img
+                  src={images[0]}
+                  alt=""
+                  className="w-[100%] h-[232px]  max-w-full object-cover"
+                />
               </Link>
 
               <div className="flex justify-between mt-4 items-center">
-                <h2 className="uppercase text-[1.2rem] md:text-[1.5rem] text-[#1E1E1E] font-bold">
+                <h2 className="uppercase text-[1.2rem] md:text-base text-[#1E1E1E] font-bold">
                   {product_name}{" "}
                 </h2>
                 <p className="text-[.925rem] font-semibold">
@@ -79,7 +84,8 @@ const Products = () => {
               </div>
 
               <p className="mb-4">
-                {description}
+                {description.split(" ").slice(0, 20).join(" ")}
+                {description.split(" ").length > 20 && "..."}
                 <Link to={`${product_name}`}>
                   <span className="text-[#4CAF50]"> see more</span>
                 </Link>
