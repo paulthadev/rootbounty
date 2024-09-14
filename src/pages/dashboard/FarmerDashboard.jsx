@@ -32,11 +32,6 @@ const FarmerDashboard = () => {
     }
   }, [userData, loading, navigate]);
 
-  if (!userData?.farmer_id) {
-    toast.error("Farmer ID is missing. Please try logging in again.");
-    return;
-  }
-
   const handlePostProduct = async (e) => {
     e.preventDefault();
 
@@ -54,9 +49,9 @@ const FarmerDashboard = () => {
             images: imageUrls,
             created_at: new Date().toISOString(),
             nutrition: nutrition,
-            location: location,
+            location: userData?.location,
             farmer_id: userData?.farmer_id,
-            company_name: userData?.company_name,
+            company_name: userData?.business_name,
           },
         ])
         .select();
@@ -113,12 +108,7 @@ const FarmerDashboard = () => {
           value={nutrition}
           onChange={(e) => setNutrition(e.target.value)}
         />
-        <Inputs
-          type="text"
-          placeholder="Location Address"
-          value={location}
-          onChange={(e) => setLocation(e.target.value)}
-        />
+
         {/* Image upload input can be omitted for this test */}
         <div className="px-2">
           <button className="btn btn-primary btn-sm mt-2" disabled={uploading}>
