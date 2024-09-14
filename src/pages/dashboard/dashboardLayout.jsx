@@ -7,7 +7,7 @@ const DashboardLayout = () => {
       <div className=" hidden h-screen lg:col-span-1 lg:block">
         <Sidebar />
       </div>
-      <div className="lg:col-span-5 bg-[#F2F2F2] sm:px-[70px] px-4 py-[2rem]">
+      <div className="col-span-5 bg-[#F2F2F2] sm:px-[70px] px-4 py-[2rem]">
         <Outlet />
       </div>
     </section>
