@@ -57,7 +57,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/buyer/dashboard",
+    path: "/buyer",
     element: (
       <ProtectedRoute>
         <BuyerDashboard />
@@ -65,7 +65,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/farmer/dashboard",
+    path: "/farmer",
     element: (
       <ProtectedRoute>
         <FarmerDashboard />
