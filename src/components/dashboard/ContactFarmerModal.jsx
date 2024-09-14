@@ -1,5 +1,8 @@
 /* eslint-disable react/prop-types */
 import { useEffect } from "react";
+import { BiPhone } from "react-icons/bi";
+import { CgClose } from "react-icons/cg";
+import Inputs from "../Inputs";
 
 const ContactFarmerModal = ({ product, closeModal }) => {
   useEffect(() => {
@@ -15,17 +18,24 @@ const ContactFarmerModal = ({ product, closeModal }) => {
     };
   }, []);
 
+  console.log(product);
+
   return (
     <dialog id="contactFarmerModal" className="modal">
-      <div className="modal-box">
-        <h3 className="font-bold text-lg">Contact Farmer</h3>
-        <p className="py-4">
-          Send a message to the farmer regarding {product.productName}.
-        </p>
-        <div className="modal-action">
-          <button className="btn" onClick={closeModal}>
-            Close
-          </button>
+      <div className="modal-box relative">
+        <h3 className="font-bold text-lg">Contact Abuja Farms</h3>
+
+        <div className="mt-4 flex items-center gap-4 ">
+          <BiPhone />
+          <span className="p-2 border border-gray-800 rounded-lg">
+            07066653871
+          </span>
+        </div>
+        <div className="modal-action absolute right-5 -top-3 cursor-pointer">
+          <CgClose
+            className="text-2xl hover:text-red-700 "
+            onClick={closeModal}
+          />
         </div>
       </div>
     </dialog>
