@@ -56,15 +56,7 @@ const FarmerDashboard = () => {
       );
 
       const nutritionData = response.data;
-      console.log(nutritionData);
       setNutritionalInfo(nutritionData.foods || []);
-
-      // Fetch health benefits if needed
-      // const benefitsResponse = await axios.get(
-      //   `https://api.example.com/health-benefits?tuberType=${tuberType}`
-      // );
-      // const benefitsData = benefitsResponse.data;
-      // setHealthBenefits(benefitsData);
     } catch (error) {
       console.error("Error fetching product details:", error);
       toast.error("Failed to fetch product details.");
@@ -245,18 +237,6 @@ const FarmerDashboard = () => {
               </li>
             </ul>
           )}
-        </div>
-
-        {/* Display health benefits */}
-        <div className="px-2 mt-4">
-          <h2 className="text-lg font-semibold">Health Benefits</h2>
-          <ul>
-            {healthBenefits.map((benefit, index) => (
-              <li key={index} className="text-sm text-gray-600">
-                {benefit}
-              </li>
-            ))}
-          </ul>
         </div>
 
         <div className="px-2">
