@@ -26,7 +26,7 @@ const MobileSidebar = () => {
   return (
     <>
       {openSidebar && (
-        <section className="bg-[#4CAF50CF] z-20 h-screen fixed top-0 right-0 w-[40vw]">
+        <section className="bg-[#4CAF50] z-20 h-screen fixed top-0 right-0 w-[40vw]">
           <div>
             <nav className="flex pt-[1.6rem] bg-[#4CAF50]">
               <Link to="/">
