@@ -143,8 +143,10 @@ const FarmerDashboard = () => {
   const handleFileChange = async (e) => {
     const files = Array.from(e.target.files);
 
+    console.log(files);
+
     if (files.length < 1 || files.length > 5) {
-      toast.error("Please select between 3 to 5 images.");
+      toast.error("Please select between 1 to 5 images.");
       return;
     }
 
