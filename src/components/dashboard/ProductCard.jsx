@@ -20,7 +20,7 @@ const ProductCard = ({ product, onIncrement, onDecrement, onRemove }) => {
           <p>
             Quantity: <b>{product.quantity}</b>
           </p>
-          <div className="flex gap-2 items-center">
+          <div className="flex gap-1 items-center">
             <button
               onClick={onDecrement}
               className="text-base bg-black border-none text-white btn btn-xs btn-primary"
@@ -29,7 +29,7 @@ const ProductCard = ({ product, onIncrement, onDecrement, onRemove }) => {
             </button>
             <button
               onClick={onIncrement}
-              className="text-base  border-none  btn-primary bg-black  text-white btn btn-xs"
+              className="text-base  border-none btn-primary bg-black  text-white btn btn-xs"
             >
               <BiPlus />
             </button>
@@ -41,7 +41,16 @@ const ProductCard = ({ product, onIncrement, onDecrement, onRemove }) => {
             </button>
           </div>
         </div>
-        <p className="text-lg font-bold">Total: {formatPrice(product.total)}</p>
+
+        <div className="flex justify-between my-2 gap-2">
+          <p>
+            Total: <b>{formatPrice(product.total)}</b>
+          </p>
+
+          <button className="btn-secondary btn btn-xs capitalize hover:bg-primary hover:text-white">
+            contact farmer
+          </button>
+        </div>
       </div>
     </div>
   );
