@@ -57,6 +57,7 @@ function RegisterSection() {
     phone: "",
     businessName: "",
     password: "",
+    location: "",
     confirmPassword: "",
     tuber: [],
   });
@@ -70,14 +71,18 @@ function RegisterSection() {
   };
 
   const handleTuberChange = (e) => {
-    const selectedTubers = Array.from(
-      e.target.selectedOptions,
-      (option) => option.value
-    );
-    setFormData((prevData) => ({
-      ...prevData,
-      tuber: selectedTubers,
-    }));
+    const { value, checked } = e.target;
+    setFormData((prevData) => {
+      // Add or remove the tuber based on whether it's checked
+      const updatedTubers = checked
+        ? [...prevData.tuber, value] // Add the tuber if checked
+        : prevData.tuber.filter((tuber) => tuber !== value); // Remove the tuber if unchecked
+
+      return {
+        ...prevData,
+        tuber: updatedTubers,
+      };
+    });
   };
 
   const handleSubmit = async (e) => {
@@ -92,6 +97,7 @@ function RegisterSection() {
 
     try {
       // Step 1: Register the user with Supabase Auth
+      // eslint-disable-next-line no-unused-vars
       const { user, error: authError } = await supabase.auth.signUp({
         email: formData.email,
         password: formData.password,
@@ -104,6 +110,7 @@ function RegisterSection() {
       }
 
       // Step 2: Insert buyer/farmer data into the 'farmer' table
+      // eslint-disable-next-line no-unused-vars
       const { data, error: insertError } = await supabase
         .from("farmer")
         .insert([
@@ -114,6 +121,7 @@ function RegisterSection() {
             phone: formData.phone,
             business_name: formData.businessName,
             tuber: formData.tuber,
+            location: formData.location,
           },
         ]);
 
@@ -133,6 +141,7 @@ function RegisterSection() {
         password: "",
         confirmPassword: "",
         tuber: [],
+        location: "",
       });
       setIsLoading(false);
     } catch (error) {
@@ -177,44 +186,87 @@ function RegisterSection() {
 
         {/* Select input for tubers */}
         <div className="px-2">
-          <label htmlFor="tuber" className="text-black font-semibold">
-            Tubers You Grow
-          </label>
-          <select
-            name="tuber"
-            id="tuber"
-            multiple
-            value={formData.tuber}
-            onChange={handleTuberChange}
-            className="w-full border-2 border-gray-300 rounded-md p-2"
-          >
-            <option value="yam">Yam</option>
-            <option value="cassava">Cassava</option>
-            <option value="potato">Potato</option>
-            <option value="sweet potato">Sweet Potato</option>
-            <option value="taro">Taro</option>
-          </select>
-        </div>
+          <label className="text-black font-semibold">Tubers You Grow</label>
+          <div className="grid grid-cols-2 gap-2">
+            <label className="flex items-center">
+              <input
+                className="checkbox checkbox-primary checkbox-xs"
+                type="checkbox"
+                value="yam"
+                checked={formData.tuber.includes("yam")}
+                onChange={handleTuberChange}
+              />
+              <span className="ml-2">Yam</span>
+            </label>
+            <label className="flex items-center">
+              <input
+                className="checkbox checkbox-primary checkbox-xs"
+                type="checkbox"
+                value="cassava"
+                checked={formData.tuber.includes("cassava")}
+                onChange={handleTuberChange}
+              />
+              <span className="ml-2">Cassava</span>
+            </label>
+            <label className="flex items-center">
+              <input
+                className="checkbox checkbox-primary checkbox-xs"
+                type="checkbox"
+                value="potato"
+                checked={formData.tuber.includes("potato")}
+                onChange={handleTuberChange}
+              />
+              <span className="ml-2">Potato</span>
+            </label>
+            <label className="flex items-center">
+              <input
+                className="checkbox checkbox-primary checkbox-xs"
+                type="checkbox"
+                value="sweet potato"
+                checked={formData.tuber.includes("sweet potato")}
+                onChange={handleTuberChange}
+              />
+              <span className="ml-2">Sweet Potato</span>
+            </label>
+            <label className="flex items-center">
+              <input
+                className="checkbox checkbox-primary checkbox-xs"
+                type="checkbox"
+                value="tumeric"
+                checked={formData.tuber.includes("tumeric")}
+                onChange={handleTuberChange}
+              />
+              <span className="ml-2">Tumeric</span>
+            </label>
+            <label className="flex items-center">
+              <input
+                className="checkbox checkbox-primary checkbox-xs"
+                type="checkbox"
+                value="garlic"
+                checked={formData.tuber.includes("garlic")}
+                onChange={handleTuberChange}
+              />
+              <span className="ml-2">Garlic</span>
+            </label>
 
-        {/* Display the selected tubers */}
-        <div className="px-2">
-          <h2 className="font-semibold">Selected Tubers:</h2>
-          {formData.tuber.length > 0 ? (
-            <ul className="list-disc pl-5">
-              {formData.tuber.map((tuber, index) => (
-                <li key={index}>{tuber}</li>
-              ))}
-            </ul>
-          ) : (
-            <p>No tubers selected.</p>
-          )}
+            <label className="flex items-center">
+              <input
+                className="checkbox checkbox-primary checkbox-xs"
+                type="checkbox"
+                value="ginger"
+                checked={formData.tuber.includes("ginger")}
+                onChange={handleTuberChange}
+              />
+              <span className="ml-2">Ginger</span>
+            </label>
+          </div>
         </div>
 
         <Inputs
           type="text"
-          placeholder="Farm Location/ Farm Address"
+          placeholder="Farm Location / Farm Address"
           name="location"
-          value={formData.businessName}
+          value={formData.location}
           onChange={handleChange}
         />
 
