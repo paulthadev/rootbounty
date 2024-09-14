@@ -1,31 +1,34 @@
-import { supabase } from "./supabase";
+import { supabase } from "../utils/supabase";
+import toast from "react-hot-toast";
 
-const uploadImage = async (file, path) => {
+const uploadImage = async (file) => {
+  const fileName = `${Date.now()}_${file.name}`;
+  const filePath = `images/${fileName}`;
+
   try {
-    const { error } = await supabase.storage
-      .from("product-images")
-      .upload(path, file, {
-        cacheControl: "3600",
-        upsert: true,
-      });
+    // Upload the image to Supabase storage
+    const { data, error } = await supabase.storage
+      .from("product-images") // Ensure this bucket exists in Supabase
+      .upload(filePath, file);
 
     if (error) {
-      console.error("Upload error:", error);
       throw error;
     }
 
-    const { data: publicUrlData, error: urlError } = supabase.storage
+    // Get the public URL of the uploaded image
+    const { data: publicData, error: urlError } = supabase.storage
       .from("product-images")
-      .getPublicUrl(path);
+      .getPublicUrl(filePath);
 
     if (urlError) {
-      console.error("Public URL error:", urlError);
       throw urlError;
     }
 
-    return publicUrlData.publicUrl;
+    // Return the public URL of the image
+    return publicData.publicUrl;
   } catch (error) {
-    console.error("Error uploading image:", error.message);
+    console.error("Error uploading image:", error);
+    toast.error(`Failed to upload image: ${error.message}`);
     return null;
   }
 };
