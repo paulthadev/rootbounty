@@ -2,6 +2,7 @@ import { useState } from "react";
 import { BsDash } from "react-icons/bs";
 import potatoe from "/potatoe.png";
 import { BiPlus } from "react-icons/bi";
+import formatPrice from "../../utils/formatPrice";
 
 const Cart = () => {
   const [products, setProducts] = useState([
@@ -74,9 +75,13 @@ const Cart = () => {
                     <h2 className="text-lg capitalize font-bold">
                       {product.productName}
                     </h2>
-                    <p>Price: ₦{product.price}</p>
+                    <p>
+                      Price: <b>{formatPrice(product.price)}</b>
+                    </p>
                     <div className="flex justify-between items-center">
-                      <p>Quantity: {product.quantity}</p>
+                      <p>
+                        Quantity: <b>{product.quantity}</b>
+                      </p>
                       <div className="flex gap-2 px-2 items-center">
                         <button
                           onClick={() => handleDecrement(index)}
@@ -92,7 +97,9 @@ const Cart = () => {
                         </button>
                       </div>
                     </div>
-                    <p className="text-lg font-bold">Total: ₦{product.total}</p>
+                    <p className="text-lg font-bold">
+                      Total: {formatPrice(product.total)}
+                    </p>
                   </div>
                 </div>
               );
