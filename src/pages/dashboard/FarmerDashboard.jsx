@@ -9,15 +9,15 @@ const FarmerDashboard = () => {
   const navigate = useNavigate();
   const { userData, loading } = useCurrentUser();
 
-  console.log(userData);
-
   const [files, setFiles] = useState([]);
   const [uploading, setUploading] = useState(false);
   const [productName, setProductName] = useState("");
   const [description, setDescription] = useState("");
-  const [nutrition, setNutrition] = useState("");
+  const [cultural, setCultural] = useState("");
   const [price, setPrice] = useState("");
   const [selectedTuberTypes, setSelectedTuberTypes] = useState([]);
+
+  console.log(userData);
 
   useEffect(() => {
     if (!loading && userData) {
@@ -25,18 +25,7 @@ const FarmerDashboard = () => {
         navigate("/dashboard");
       }
     }
-
-    if (!loading && !userData) {
-      toast.error("User is not properly authenticated.");
-      navigate("/login"); // Redirect to login page
-    }
-  }, [userData, loading, navigate]);
-
-  useEffect(() => {
-    if (userData?.tuber) {
-      setSelectedTuberTypes(userData.tuber);
-    }
-  }, [userData?.tuber]);
+  }, []);
 
   const handleTuberChange = (e) => {
     const value = e.target.value;
@@ -63,11 +52,11 @@ const FarmerDashboard = () => {
             price: price,
             images: imageUrls,
             created_at: new Date().toISOString(),
-            nutrition: nutrition,
+            cultural: cultural,
             location: userData?.location,
             farmer_id: userData?.farmer_id,
             business_name: userData?.business_name,
-            tuber_type: selectedTuberTypes, // Use the new column name
+            tuber_type: selectedTuberTypes,
           },
         ])
         .select();
@@ -87,7 +76,7 @@ const FarmerDashboard = () => {
       setDescription("");
       setPrice("");
       setFiles([]);
-      setNutrition("");
+      setCultural("");
       setSelectedTuberTypes([]);
     } catch (error) {
       console.error("Error posting product:", error);
@@ -120,13 +109,13 @@ const FarmerDashboard = () => {
         />
         <Inputs
           type="text"
-          placeholder="Nutritional Information"
-          value={nutrition}
-          onChange={(e) => setNutrition(e.target.value)}
+          placeholder="Cultural values or historical information."
+          value={cultural}
+          onChange={(e) => setCultural(e.target.value)}
         />
 
         <div className="px-2 mt-4">
-          <label className="block font-medium text-gray-700">
+          <label className="block font-medium md:text-lg text-gray-700">
             Select Tuber Types:
           </label>
           {userData?.tuber?.map((tuber) => (
@@ -146,7 +135,7 @@ const FarmerDashboard = () => {
         {/* Image upload input can be omitted for this test */}
         <div className="px-2">
           <button
-            className="btn btn-primary btn-sm text-base mt-2"
+            className="btn btn-primary btn-sm text-base text-white mt-2"
             disabled={uploading}
           >
             {uploading ? "Uploading..." : "Post Product"}
