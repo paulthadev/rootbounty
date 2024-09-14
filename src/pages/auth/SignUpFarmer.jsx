@@ -6,6 +6,7 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { supabase } from "../../utils/supabase";
 import ButtonSpinner from "../../components/ButtonSpinner";
+import { useNavigate } from "react-router";
 
 const SignUpBuyer = () => (
   <section className="relative flex flex-col">
@@ -49,6 +50,7 @@ function Heading() {
 }
 
 function RegisterSection() {
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     firstname: "",
@@ -131,7 +133,7 @@ function RegisterSection() {
         return;
       }
 
-      toast.success("Account created successfully!");
+      toast.success("Farmer Account created successfully!");
       setFormData({
         firstname: "",
         lastname: "",
@@ -144,6 +146,7 @@ function RegisterSection() {
         location: "",
       });
       setIsLoading(false);
+      navigate("/login");
     } catch (error) {
       toast.error(`An unexpected error occurred: ${error.message}`);
       setIsLoading(false);
