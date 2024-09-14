@@ -10,8 +10,6 @@ const Products = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  console.log(products);
-
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -50,7 +48,6 @@ const Products = () => {
             description,
           } = product;
 
-          console.log(images);
           return (
             <article key={product_id} className="px-6 bg-white rounded-lg">
               <div className="flex justify-between items-center mt-[3rem] mb-[1.69rem]">
@@ -66,18 +63,20 @@ const Products = () => {
                 </p>
               </div>
 
-              <Link to={`${product_name}`}>
+              <Link to={`${product_id}`}>
                 <img
                   src={images[0]}
                   alt=""
-                  className="w-[100%] h-[232px]  max-w-full object-cover"
+                  className="w-[100%] h-[232px] rounded-lg  max-w-full object-cover"
                 />
               </Link>
 
               <div className="flex justify-between mt-4 items-center">
-                <h2 className="uppercase text-[1.2rem] md:text-base text-[#1E1E1E] font-bold">
-                  {product_name}{" "}
-                </h2>
+                <Link to={`${product_id}`}>
+                  <h2 className="uppercase text-[1.2rem] md:text-base text-[#1E1E1E] font-bold">
+                    {product_name}{" "}
+                  </h2>
+                </Link>
                 <p className="text-[.925rem] font-semibold">
                   {formatPrice(price)}
                 </p>
@@ -86,7 +85,7 @@ const Products = () => {
               <p className="mb-4">
                 {description.split(" ").slice(0, 20).join(" ")}
                 {description.split(" ").length > 20 && "..."}
-                <Link to={`${product_name}`}>
+                <Link to={`${product_id}`}>
                   <span className="text-[#4CAF50]"> see more</span>
                 </Link>
               </p>
