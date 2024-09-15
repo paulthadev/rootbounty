@@ -1,6 +1,15 @@
 /* eslint-disable react/prop-types */
 
-function Inputs({ type, placeholder, className, name, onChange, value, rows }) {
+function Inputs({
+  type,
+  placeholder,
+  className,
+  name,
+  onChange,
+  value,
+  rows,
+  label,
+}) {
   const inputProps = {
     type,
     name,
@@ -12,6 +21,9 @@ function Inputs({ type, placeholder, className, name, onChange, value, rows }) {
 
   return (
     <div className="p-2">
+      <label className="block font-medium text-sm md:text-lg lg:text-xl">
+        {label}
+      </label>
       {type === "textarea" ? (
         <textarea
           {...inputProps}
