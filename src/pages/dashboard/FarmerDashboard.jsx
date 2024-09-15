@@ -17,6 +17,8 @@ const FarmerDashboard = () => {
     description: "",
     cultural: "",
     price: "",
+    healthBenefits: "",
+    kg: "",
     selectedTuberType: null,
     nutritionalInfo: [],
   });
@@ -25,7 +27,7 @@ const FarmerDashboard = () => {
   useEffect(() => {
     if (!loading && userData) {
       if (userData?.user_type !== "farmer") {
-        navigate("/dashboard");
+        navigate("/dashboard/buyer", { replace: true });
       }
     }
   }, [loading, userData, navigate]);
@@ -118,6 +120,8 @@ const FarmerDashboard = () => {
             farmer_id: userData?.farmer_id,
             business_name: userData?.business_name,
             tuber_type: formData.selectedTuberType,
+            health: formData.healthBenefits,
+            kg: formData.kg,
             nutrition: nutritionalData,
           },
         ])
@@ -135,15 +139,18 @@ const FarmerDashboard = () => {
 
       // Clear fields
       setFormData({
-        files: [],
-        productName: "",
-        description: "",
-        cultural: "",
+        kg: "",
         price: "",
-        selectedTuberType: null,
+        files: [],
+        cultural: "",
+        description: "",
+        productName: "",
+        healthBenefits: "",
         nutritionalInfo: [],
+        selectedTuberType: null,
       });
       document.querySelector('input[type="file"]').value = "";
+      e.target.reset();
     } catch (error) {
       console.error("Error posting product:", error);
       toast.error(`Error posting product: ${error.message}`);
@@ -180,7 +187,10 @@ const FarmerDashboard = () => {
     <div>
       <h1 className="p-2 text-2xl font-semibold">Add Product</h1>
       <form onSubmit={handlePostProduct}>
+        {/* Product name  */}
+
         <Inputs
+          label="Product Name"
           type="text"
           placeholder="Product Name"
           value={formData.productName}
@@ -189,8 +199,11 @@ const FarmerDashboard = () => {
           }
         />
 
+        {/* Tuber Type */}
         <div className="p-2 flex items-center gap-x-4">
-          <label className="block font-medium text-xl">Tuber type:</label>
+          <label className="block font-medium text-sm md:text-lg lg:text-xl">
+            Tuber type:
+          </label>
           {userData?.tuber?.map((tuber) => (
             <div key={tuber} className="flex items-center">
               <input
@@ -198,31 +211,53 @@ const FarmerDashboard = () => {
                 value={tuber}
                 checked={formData.selectedTuberType === tuber}
                 onChange={handleTuberChange}
-                className="mr-2 radio radio-primary"
+                className="mr-1 radio radio-primary radio-xs md:radio-sm"
               />
               <label className="text-gray-600 capitalize">{tuber}</label>
             </div>
           ))}
         </div>
 
+        {/* Description */}
         <Inputs
+          label="Description"
           type="textarea"
-          placeholder="Description"
+          placeholder="Provide Description of the product"
           value={formData.description}
           onChange={(e) =>
             setFormData((prev) => ({ ...prev, description: e.target.value }))
           }
           rows={6}
         />
+
+        {/* Price and Number of KG */}
+        <div className="grid grid-cols-2">
+          {/* Price */}
+          <Inputs
+            label="Price"
+            type="number"
+            placeholder="Price"
+            value={formData.price}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, price: e.target.value }))
+            }
+          />
+
+          {/* Number of KG */}
+          <Inputs
+            label="Number of KG"
+            type="number"
+            placeholder="Number of KG"
+            value={formData.kg}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, kg: e.target.value }))
+            }
+          />
+        </div>
+
+        {/* Cultural values */}
         <Inputs
-          type="number"
-          placeholder="Price"
-          value={formData.price}
-          onChange={(e) =>
-            setFormData((prev) => ({ ...prev, price: e.target.value }))
-          }
-        />
-        <Inputs
+          label="Cultural Values"
           type="textarea"
           placeholder="Cultural values or historical information."
           value={formData.cultural}
@@ -234,12 +269,36 @@ const FarmerDashboard = () => {
 
         {/* File upload */}
         <div className="p-2">
+          <h2 className="block font-medium text-sm md:text-lg lg:text-xl">
+            Upload Images
+          </h2>
           <input
             type="file"
             accept="image/*"
             multiple
             onChange={handleFileChange}
             className="file-input w-full max-w-2xl file-input-bordered file-input-primary text-gray-700"
+          />
+        </div>
+
+        {/* Health benefits */}
+        <div className="m-2">
+          <h2 className="block font-medium text-sm md:text-lg lg:text-xl">
+            Health Benefits{" "}
+            <span className="text-gray-500 text-sm">(Optional)</span>
+          </h2>
+          <textarea
+            type="text"
+            placeholder="Health Benefits (optional)"
+            value={formData.healthBenefits}
+            onChange={(e) =>
+              setFormData((prev) => ({
+                ...prev,
+                healthBenefits: e.target.value,
+              }))
+            }
+            rows={4}
+            className={`registrationinput resize-none bg-white h-fit py-4 border outline-none focus:border-gray-400 input border-gray-400 w-full rounded-lg text-gray-900`}
           />
         </div>
 
@@ -296,7 +355,7 @@ const FarmerDashboard = () => {
           )}
         </div>
 
-        <div className="px-2">
+        <div className="p-2">
           <button
             className="btn btn-primary btn-block  md:btn-wide text-base text-white mt-2"
             disabled={uploading}
