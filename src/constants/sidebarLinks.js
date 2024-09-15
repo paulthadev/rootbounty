@@ -6,10 +6,7 @@ export const buyerlinks = [
         title: "products",
         link: "/buyer",
       },
-      {
-        title: "orders",
-        link: "/orders",
-      },
+
       {
         title: "carts",
         link: "/cart",
@@ -38,10 +35,6 @@ export const farmerlinks = [
       {
         title: "add product",
         link: "/farmer",
-      },
-      {
-        title: "earnings",
-        link: "/earnings",
       },
     ],
   },
