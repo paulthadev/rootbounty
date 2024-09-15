@@ -151,6 +151,7 @@ const FarmerDashboard = () => {
       });
       document.querySelector('input[type="file"]').value = "";
       e.target.reset();
+      navigate("/dashboard/productLists");
     } catch (error) {
       console.error("Error posting product:", error);
       toast.error(`Error posting product: ${error.message}`);
@@ -188,7 +189,6 @@ const FarmerDashboard = () => {
       <h1 className="p-2 text-2xl font-semibold">Add Product</h1>
       <form onSubmit={handlePostProduct}>
         {/* Product name  */}
-
         <Inputs
           label="Product Name"
           type="text"
@@ -212,6 +212,7 @@ const FarmerDashboard = () => {
                 checked={formData.selectedTuberType === tuber}
                 onChange={handleTuberChange}
                 className="mr-1 radio radio-primary radio-xs md:radio-sm"
+                required
               />
               <label className="text-gray-600 capitalize">{tuber}</label>
             </div>
@@ -236,6 +237,8 @@ const FarmerDashboard = () => {
           <Inputs
             label="Price"
             type="number"
+            min={0}
+            step="0.01"
             placeholder="Price"
             value={formData.price}
             onChange={(e) =>
@@ -246,7 +249,9 @@ const FarmerDashboard = () => {
           {/* Number of KG */}
           <Inputs
             label="Number of KG"
-            type="number"
+            type="float"
+            min={0}
+            step="0.01"
             placeholder="Number of KG"
             value={formData.kg}
             onChange={(e) =>
@@ -276,12 +281,13 @@ const FarmerDashboard = () => {
             type="file"
             accept="image/*"
             multiple
+            required
             onChange={handleFileChange}
             className="file-input w-full max-w-2xl file-input-bordered file-input-primary text-gray-700"
           />
         </div>
 
-        {/* Health benefits */}
+        {/* Health benefits (optional) */}
         <div className="m-2">
           <h2 className="block font-medium text-sm md:text-lg lg:text-xl">
             Health Benefits{" "}
