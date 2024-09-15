@@ -200,7 +200,7 @@ const FarmerDashboard = () => {
         />
 
         {/* Tuber Type */}
-        <div className="p-2 flex items-center gap-x-4">
+        <div className="p-2 flex items-center flex-wrap gap-x-4 gap-y-2">
           <label className="block font-medium text-sm md:text-lg lg:text-xl">
             Tuber type:
           </label>
