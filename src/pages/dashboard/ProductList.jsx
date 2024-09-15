@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import Spinner from "../../components/Spinner";
 import useCurrentUser from "../../hooks/useCurrentUser";
 import formatPrice from "../../utils/formatPrice";
+import { formatDate } from "../../utils/formatDate";
 
 function ProductList() {
   const { userData } = useCurrentUser();
@@ -94,7 +95,7 @@ function ProductList() {
                   ))}
                 </div>
 
-                <div className="py-6">
+                <div className="pt-6">
                   <p className="text-xl font-semibold">
                     {product.product_name}
                   </p>
@@ -115,15 +116,34 @@ function ProductList() {
                     )}
                   </p>
 
-                  <p className="text-base font-semibold">
-                    <b>Price: </b>
-                    {formatPrice(product.price)}
+                  <div className="grid grid-cols-2 mt-2">
+                    <p className="text-base font-semibold">
+                      <b>Price: </b>
+                      {formatPrice(product.price)}
+                    </p>
+
+                    <p className="text-base">
+                      <b>KG: </b>
+                      {product.kg}kg
+                    </p>
+                  </div>
+
+                  <p className="text-base">
+                    <b>Tuber type: </b>{" "}
+                    <span className="capitalize">{product.tuber_type}</span>
                   </p>
 
-                  <div>
+                  <p className="text-base">
+                    <b>Date created: </b>{" "}
+                    <span>
+                      <b>{formatDate(product.created_at)}</b> ago
+                    </span>
+                  </p>
+
+                  <div className="mt-2">
                     <button
                       onClick={() => deleteProduct(product.product_id)}
-                      className="mt-2 bg-red-500 text-white p-2 rounded"
+                      className="btn btn-error btn-block bg-red-500 text-white  text-lg rounded"
                     >
                       Delete
                     </button>
