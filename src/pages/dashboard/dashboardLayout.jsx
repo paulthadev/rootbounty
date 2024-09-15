@@ -17,11 +17,11 @@ const DashboardLayout = () => {
       <div className="col-span-5 bg-[#F2F2F2] w-[100vw] h-screen overflow-scroll lg:w-auto sm:px-[70px] px-4 py-[2rem]">
         <span
           className="lg:hidden flex  justify-end text-2xl my-6 cursor-pointer"
-          onClick={() => dispatch(setOpenSidebar(!openSidebar))}
+          onClick={() => dispatch(setOpenSidebar(true))}
         >
           <FaBars />
-          {openSidebar && <MobileSidebar />}
         </span>
+        {openSidebar && <MobileSidebar />}
         <Outlet />
       </div>
     </section>
