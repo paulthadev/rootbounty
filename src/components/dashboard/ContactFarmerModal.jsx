@@ -4,6 +4,7 @@ import { CgClose, CgMail } from "react-icons/cg";
 import { supabase } from "../../utils/supabase";
 import { IoCall } from "react-icons/io5";
 import toast from "react-hot-toast";
+import { BiCurrentLocation } from "react-icons/bi";
 
 const ContactFarmerModal = ({ product, closeModal }) => {
   const { farmer_id } = product;
@@ -59,11 +60,15 @@ const ContactFarmerModal = ({ product, closeModal }) => {
             <h3 className="font-bold text-2xl text-center">
               Contact {business_name}
             </h3>
-            <p className="text-center text-gray-500 capitalize">{location}</p>
 
-            <div className="mt-4 flex items-center justify-center gap-2">
+            <div className="flex items-center justify-center gap-1">
+              <BiCurrentLocation className="text-gray-500" />
+              <p className="text-center text-gray-500 capitalize">{location}</p>
+            </div>
+
+            <div className="mt-4 flex-wrap flex items-center justify-center gap-2">
               <div
-                className="flex gap-2 px-2 py-0.5 border border-gray-800 rounded-lg items-center cursor-pointer"
+                className="flex gap-2 px-2 py-0.5 border border-[#CCF] rounded-lg items-center cursor-pointer"
                 onClick={() => (window.location.href = `tel:${phone}`)}
               >
                 <IoCall className="text-xl" />
@@ -71,7 +76,7 @@ const ContactFarmerModal = ({ product, closeModal }) => {
               </div>
 
               <div
-                className="flex gap-2 px-2 py-0.5 border border-gray-800 rounded-lg items-center cursor-pointer"
+                className="flex gap-2 px-2 py-0.5 border border-[#CCF]  rounded-lg items-center cursor-pointer"
                 onClick={() => (window.location.href = `mailto:${email}`)}
               >
                 <CgMail className="text-xl" />
