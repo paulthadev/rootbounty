@@ -11,7 +11,7 @@ const UserProfile = () => {
     if (!loading && userData) {
       if (userData?.user_type === "buyer") {
         // Redirect to the buyer dashboard
-        navigate("/dashboard");
+        navigate("/dashboard/buyer");
       } else {
         // Redirect to the farmer dashboard
         navigate("/dashboard/farmer");
