@@ -9,9 +9,8 @@ import ProductCard from "../../components/dashboard/ProductCard";
 
 const Cart = () => {
   // const products = useSelector((state) => state.cart.products);
-  const {cart}= useSelector((state)=>state.cart)
+  const { cart } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
-
 
   // In calculateTotalPrice
   const calculateTotalPrice = () => {
@@ -25,9 +24,10 @@ const Cart = () => {
   const calculateTotalItems = () => {
     return cart.reduce((total, product) => total + product.quantity, 0);
   };
-  if (cart == []){
-    <h2>ther is no item in the cart</h2>
-}
+  if (cart == []) {
+    
+    return <h2>ther is no item in the cart</h2>;
+  }
   return (
     <section className="py-10">
       <div className="flex justify-between items-center px-4 lg:px-0 mb-4">
@@ -37,12 +37,16 @@ const Cart = () => {
       <div className="grid grid-cols-1 lg:grid-cols-6 gap-4 px-4 lg:px-0">
         <div className="col-span-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {cart.map((product) => (
+            {cart?.map((product) => (
               <ProductCard
                 key={product?.product_id}
                 product={product}
-                onIncrement={() => dispatch(incrementQuantity(product.product_id))}
-                onDecrement={() => dispatch(decrementQuantity(product.product_id))}
+                onIncrement={() =>
+                  dispatch(incrementQuantity(product.product_id))
+                }
+                onDecrement={() =>
+                  dispatch(decrementQuantity(product.product_id))
+                }
                 onRemove={() => dispatch(removeProduct(product.product_id))}
               />
             ))}

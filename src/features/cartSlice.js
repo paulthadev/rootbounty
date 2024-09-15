@@ -37,6 +37,7 @@ export const cartSlice = createSlice({
       if (product) {
         product.quantity += 1;
         product.total = product.quantity * product.price;
+        localStorage.setItem("cart", JSON.stringify(state));
       }
     },
     decrementQuantity: (state, action) => {
@@ -44,6 +45,7 @@ export const cartSlice = createSlice({
       if (product && product.quantity > 1) {
         product.quantity -= 1;
         product.total = product.quantity * product.price;
+        localStorage.setItem("cart", JSON.stringify(state));
       }
     },
     removeProduct: (state, action) => {
