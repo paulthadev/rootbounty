@@ -9,11 +9,8 @@ const generalSlice = createSlice({
   initialState,
   reducers: {
     setOpenSidebar: (state, action) => {
-      // console.log('started');
-      
       state.openSidebar = action.payload;
-      console.log(action.payload);
-
+      // console.log(action.payload);
     },
   },
 });
