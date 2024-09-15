@@ -35,7 +35,7 @@ const Products = () => {
 
   return (
     <section>
-      <div className="grid md:grid-cols-2 gap-4  lg:grid-cols-3 ">
+      <div className="grid md:grid-cols-2 gap-x-4 gap-y-10  lg:grid-cols-3 ">
         {products.map((product) => {
           const {
             product_name,
