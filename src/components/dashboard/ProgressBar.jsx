@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 const ProgressBar = ({ name, percentage }) => {
   return (
-    <div className="flex  flex-col  justify-between mb-4">
+    <div className="flex flex-col justify-between gap-2">
       <p className="font-semibold">{name}</p>
 
       <div className="flex items-center gap-8">
@@ -15,7 +15,7 @@ const ProgressBar = ({ name, percentage }) => {
           {/* Unfilled section is implicitly the background */}
         </div>
         {/* Percentage display */}
-        <span className="ml-4 text-xl font-bold">{percentage.toFixed(2)}%</span>
+        <span className="ml-4 font-bold">{percentage.toFixed(2)}%</span>
       </div>
     </div>
   );
