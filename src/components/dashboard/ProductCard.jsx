@@ -32,7 +32,7 @@ const ProductCard = ({ product, onIncrement, onDecrement, onRemove }) => {
           <p>
             Quantity: <b>{product.quantity}</b>
           </p>
-          <div className="flex gap-1 items-center">
+          <div className="flex md:gap-2 gap-3 items-center">
             <button
               onClick={onDecrement}
               className="text-base bg-black border-none text-white btn btn-xs btn-primary"
@@ -58,16 +58,15 @@ const ProductCard = ({ product, onIncrement, onDecrement, onRemove }) => {
           <p>
             Total: <b>{formatPrice(product.total)}</b>
           </p>
-
-          {/* Contact Farmer Button */}
-          <button
-            onClick={handleOpenModal}
-            className="btn-secondary btn btn-xs capitalize hover:bg-primary hover:text-white"
-          >
-            Contact Farmer
-          </button>
         </div>
       </div>
+      {/* Contact Farmer Button */}
+      <button
+        onClick={handleOpenModal}
+        className="text-white btn btn-block text-lg capitalize btn-primary "
+      >
+        Contact Farmer
+      </button>
 
       {/* Contact Farmer Modal */}
       {isModalOpen && (
