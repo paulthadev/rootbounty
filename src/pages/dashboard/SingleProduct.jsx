@@ -7,6 +7,7 @@ import { MdKeyboardArrowLeft } from "react-icons/md";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { addItemToCart } from "../../features/cartSlice";
 import { useDispatch } from "react-redux";
+import Spinner from "../../components/Spinner";
 
 const SingleProduct = () => {
   const [product, setProduct] = useState([]);
@@ -39,6 +40,7 @@ const SingleProduct = () => {
 
   useEffect(() => {
     fetchProduct();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const {
@@ -84,20 +86,24 @@ const SingleProduct = () => {
     );
   };
 
+  if (loading) return <Spinner />;
+
   return (
     <section>
-      <div className="flex items-center gap-x-[5rem] lg:gap-x-[10rem]">
-        <div>
-          <h2 className="text-[#1E1E1E] text-lg font-bold capitalize">
-            {business_name}
-          </h2>
-          <p className="text-[#1E1E1E] text-sm">{location}</p>
-        </div>
-        <p className="text-sm text-[#1E1E1E]">{formatDate(created_at)}</p>
-      </div>
-
       <div className="grid md:grid-cols-2 mt-12 gap-8">
         <div>
+          <div className="flex items-center justify-between gap-x-[5rem] lg:gap-x-[10rem]">
+            <div>
+              <h2 className="text-[#1E1E1E] text-lg font-bold capitalize">
+                {business_name}
+              </h2>
+              <p className="text-[#1E1E1E] text-sm">{location}</p>
+            </div>
+            <p className="text-sm text-[#1E1E1E]">
+              {formatDate(created_at)} ago
+            </p>
+          </div>
+
           {/* Image Slider */}
           {images.length > 0 ? (
             <div className="relative">
@@ -135,7 +141,7 @@ const SingleProduct = () => {
           </div>
         </div>
 
-        <div>
+        <div className="md:mt-10">
           <div className="border-b-[1px] pb-3 mb-4">
             <h3 className="text-primary text-[1.5rem] capitalize font-bold">
               description
