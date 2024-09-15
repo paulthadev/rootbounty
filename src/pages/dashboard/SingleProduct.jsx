@@ -10,6 +10,7 @@ import { useDispatch } from "react-redux";
 import Spinner from "../../components/Spinner";
 import ProgressBar from "../../components/dashboard/ProgressBar";
 import KgSelector from "../../components/dashboard/KgSelector";
+import { FaLocationDot } from "react-icons/fa6";
 
 const SingleProduct = () => {
   const [product, setProduct] = useState([]);
@@ -48,9 +49,10 @@ const SingleProduct = () => {
     product_name,
     farmer_id,
     health,
-    nutrition, // This is where nutrition data comes in
+    nutrition,
     price,
-    kg, // This will display the kg
+    kg,
+    tuber_type,
     images = [],
     created_at,
   } = product;
@@ -88,15 +90,18 @@ const SingleProduct = () => {
     <section>
       <div className="grid md:grid-cols-2 mt-12 gap-8">
         <div>
-          <div className="flex items-center justify-between gap-x-[5rem] lg:gap-x-[10rem]">
+          <div className="flex mb-4 items-center justify-between gap-x-[5rem] lg:gap-x-[10rem]">
             <div>
               <h2 className="text-[#1E1E1E] text-lg font-bold capitalize">
                 {business_name}
               </h2>
-              <p className="text-[#1E1E1E] text-sm">{location}</p>
+              <div className="flex gap-0.5 text-gray-600 items-center">
+                <FaLocationDot className="text-xs" />
+                <p className="text-xs">{location}</p>
+              </div>
             </div>
             <p className="text-sm text-[#1E1E1E]">
-              {formatDate(created_at)} ago
+              <b className="capitalize">{formatDate(created_at)}</b> ago
             </p>
           </div>
 
@@ -125,25 +130,43 @@ const SingleProduct = () => {
             <p>No images available</p>
           )}
 
-          <h2 className="text-primary capitalize text-[1.5rem] font-bold mt-4">
-            {product_name}
-          </h2>
+          <div className="flex justify-between mt-4 items-center">
+            <h2 className="text-primary capitalize text-[1.5rem] font-bold">
+              {product_name}
+            </h2>
+
+            <p className="capitalize text-gray-500 text-xs font-semibold">
+              Type: {tuber_type}
+            </p>
+          </div>
 
           {/* Display Nutrition Values */}
           <div>
-            <h3 className="text-[#1E1E1E] mt-8 font-bold text-[1.3rem]">
+            <h3 className="text-[#1E1E1E] mt-4 font-bold text-[1.3rem]">
               Nutrition Value
             </h3>
 
+            {/* Display each nutritional value as a progress bar */}
             {nutrition && (
-              <div className="mt-4">
-                {/* Display each nutritional value as a progress bar */}
-                <div>
-                  <ProgressBar name="Protein" percentage={75} />
-                  <ProgressBar name="Carbohydrate" percentage={70} />
-                  <ProgressBar name="Mineral" percentage={34} />
-                  <ProgressBar name="Vitamin" percentage={47} />
-                </div>
+              <div className="mt-1">
+                <ProgressBar
+                  name="Calories"
+                  percentage={nutrition.calories / 2}
+                />
+                <ProgressBar name="Sodium" percentage={nutrition.sodium / 2} />
+                <ProgressBar name="Sugars" percentage={nutrition.sugars / 2} />
+                <ProgressBar
+                  name="Protein"
+                  percentage={nutrition.protein / 2}
+                />
+                <ProgressBar
+                  name="Potassium"
+                  percentage={nutrition.potassium / 10}
+                />
+                <ProgressBar
+                  name="Cholesterol"
+                  percentage={nutrition.cholesterol}
+                />
               </div>
             )}
           </div>
@@ -154,20 +177,30 @@ const SingleProduct = () => {
           </div>
         </div>
 
-        <div className="md:mt-10">
-          <div className="border-b-[1px] pb-3 mb-4">
+        <div className="md:mt-14">
+          <div className="border-b-[2px] pb-3 mb-4">
             <h3 className="text-primary text-[1.5rem] capitalize font-bold">
               description
             </h3>
             <p>{description}</p>
           </div>
+
           <div className="border-b-[2px] pb-3 mb-4">
             <h3 className="text-primary text-[1.5rem] capitalize font-bold">
               health benefit
             </h3>
-            <p>{health || "information not provided"}</p>
+
+            <p>
+              {health ? (
+                health
+              ) : (
+                <p className="capitalize italic text-sm text-gray-700">
+                  information not provided
+                </p>
+              )}
+            </p>
           </div>
-          <div className="border-b-[1px] pb-3 mb-4">
+          <div className=" pb-3 mb-4">
             <h3 className="text-primary text-[1.5rem] capitalize font-bold">
               cultural relevance
             </h3>
@@ -175,7 +208,7 @@ const SingleProduct = () => {
           </div>
           <div className="flex gap-3 mt-7">
             <button
-              className="md:text-2xl btn btn-transparent text-[#1E1E1ECC] rounded-full md:btn-lg"
+              className="md:text-2xl btn hover:btn-primary hover:text-white btn-transparent text-[#1E1E1ECC] rounded-full"
               onClick={addToCart}
             >
               Add to cart
