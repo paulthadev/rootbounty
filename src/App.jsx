@@ -11,12 +11,11 @@ import FarmerDashboard from "./pages/dashboard/FarmerDashboard";
 import AuthCheck from "./routes/AuthCheck";
 import ProtectedRoute from "./routes/ProtectedRoutes";
 import DashboardLayout from "./pages/dashboard/dashboardLayout";
-import Order from "./pages/dashboard/Order";
 import Cart from "./pages/dashboard/Cart";
 import SingleProduct from "./pages/dashboard/SingleProduct";
-import Earnings from "./pages/dashboard/Earnings";
 import BuyerProfile from "./pages/dashboard/BuyerProfile";
 import FarmerProfile from "./pages/dashboard/FarmerProfile";
+import ProductList from "./pages/dashboard/ProductList";
 
 const router = createBrowserRouter([
   {
@@ -85,16 +84,12 @@ const router = createBrowserRouter([
         element: <FarmerDashboard />,
       },
       {
-        path: "orders",
-        element: <Order />,
-      },
-      {
         path: "cart",
         element: <Cart />,
       },
       {
-        path: "earnings",
-        element: <Earnings />,
+        path: "productLists",
+        element: <ProductList />,
       },
       {
         path: "buyerprofile",

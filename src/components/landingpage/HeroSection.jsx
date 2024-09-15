@@ -4,6 +4,7 @@ import { heroSectionInfo } from "../../constants/landing";
 import { styles } from "../../styles/styles";
 import { useNavigate } from "react-router";
 import useCurrentUser from "../../hooks/useCurrentUser"; // Import your custom hook for user data
+import { handleLogout } from "../../utils/logout";
 
 const HeroSection = () => (
   <section className="h-fit flex flex-col scrollbar-hide">
@@ -47,12 +48,19 @@ function MainHeading() {
       {/* Conditionally render buttons based on user session */}
       {user ? (
         // Show "Go to Profile" button if logged in
-        <div className="flex gap-x-4 xs:gap-x-7 text-white">
+        <div className="flex gap-x-4 xs:gap-x-7 text-white items-center">
           <button
             onClick={() => navigate("/profile")}
             className="text-xs xs:text-sm md:text-base bg-[#4CAF50] hover:bg-[#146317] px-4 py-2 rounded-md transition-all duration-300 lg:text-lg"
           >
             Go to Profile
+          </button>
+
+          <button
+            onClick={() => handleLogout()}
+            className="text-xs xs:text-sm btn-sm md:text-base btn-warning btn px-4  rounded-md transition-all duration-300 lg:text-lg"
+          >
+            Logout
           </button>
         </div>
       ) : (
