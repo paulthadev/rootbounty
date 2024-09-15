@@ -82,7 +82,7 @@ function ProductList() {
             {products?.map((product) => (
               <div
                 key={product.product_id}
-                className="bg-white p-4 rounded-lg shadow-md h-72 overflow-hidden"
+                className="bg-white p-4 rounded-lg shadow-md h-fit overflow-hidden"
               >
                 <div className="flex gap-x-4">
                   {product?.images?.map((image, index) => (
@@ -120,7 +120,7 @@ function ProductList() {
                     {formatPrice(product.price)}
                   </p>
 
-                  <div className="">
+                  <div>
                     <button
                       onClick={() => deleteProduct(product.product_id)}
                       className="mt-2 bg-red-500 text-white p-2 rounded"
