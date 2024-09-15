@@ -9,29 +9,67 @@ function ProductList() {
   const { userData } = useCurrentUser();
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [expandedProductId, setExpandedProductId] = useState(null);
 
   const farmerId = userData?.farmer_id;
 
-  const fecthProducts = async () => {
+  const fetchProducts = async () => {
     try {
       setIsLoading(true);
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from("product")
         .select("*")
         .eq("farmer_id", farmerId);
 
+      if (error) throw error;
+
       setProducts(data);
-      setIsLoading(false);
     } catch (error) {
       toast.error(`Error: ${error.message}`);
+    } finally {
       setIsLoading(false);
     }
   };
 
+  const deleteProduct = async (productId) => {
+    try {
+      const { error } = await supabase
+        .from("product")
+        .delete()
+        .eq("product_id", productId);
+
+      if (error) throw error;
+
+      toast.success("Product deleted successfully!");
+      // Refetch products after deletion
+      fetchProducts();
+    } catch (error) {
+      toast.error(`Error deleting product: ${error.message}`);
+    }
+  };
+
+  const toggleDescription = (productId) => {
+    if (expandedProductId === productId) {
+      setExpandedProductId(null);
+    } else {
+      setExpandedProductId(productId);
+    }
+  };
+
   useEffect(() => {
-    fecthProducts();
+    if (farmerId) {
+      fetchProducts();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [farmerId]);
+
+  const truncateText = (text, limit) => {
+    const words = text.split(" ");
+    if (words.length > limit) {
+      return words.slice(0, limit).join(" ") + "...";
+    }
+    return text;
+  };
 
   return (
     <div>
@@ -43,19 +81,17 @@ function ProductList() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 ">
             {products?.map((product) => (
               <div
-                key={product.id}
-                className="bg-white p-4 rounded-lg shadow-md"
+                key={product.product_id}
+                className="bg-white p-4 rounded-lg shadow-md h-72 overflow-hidden"
               >
                 <div className="flex gap-x-4">
-                  {product?.images?.map((image, index) => {
-                    return (
-                      <img
-                        src={image}
-                        key={index}
-                        className=" max-w-full w-fit h-14 rounded-lg"
-                      />
-                    );
-                  })}
+                  {product?.images?.map((image, index) => (
+                    <img
+                      src={image}
+                      key={index}
+                      className="max-w-full w-fit h-14 rounded-lg"
+                    />
+                  ))}
                 </div>
 
                 <div className="py-6">
@@ -64,13 +100,34 @@ function ProductList() {
                   </p>
 
                   <p className="text-base text-gray-700">
-                    {product.description}
+                    {expandedProductId === product.product_id
+                      ? product.description
+                      : truncateText(product.description, 10)}
+                    {product.description.split(" ").length > 10 && (
+                      <button
+                        onClick={() => toggleDescription(product.product_id)}
+                        className="text-blue-500 ml-2"
+                      >
+                        {expandedProductId === product.product_id
+                          ? "View less"
+                          : "View more"}
+                      </button>
+                    )}
                   </p>
 
                   <p className="text-base font-semibold">
                     <b>Price: </b>
                     {formatPrice(product.price)}
                   </p>
+
+                  <div className="">
+                    <button
+                      onClick={() => deleteProduct(product.product_id)}
+                      className="mt-2 bg-red-500 text-white p-2 rounded"
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}
