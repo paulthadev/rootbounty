@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 import { formatDate } from "../../utils/formatDate";
 import { MdKeyboardArrowLeft } from "react-icons/md";
 import { MdKeyboardArrowRight } from "react-icons/md";
-import { addItemToCart } from "../../features/cartSlice"; 
+import { addItemToCart } from "../../features/cartSlice";
 import { useDispatch } from "react-redux";
 
 const SingleProduct = () => {
@@ -13,7 +13,7 @@ const SingleProduct = () => {
   const [loading, setLoading] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0); // Slider state
   const { productId } = useParams();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const fetchProduct = async () => {
     try {
@@ -36,7 +36,7 @@ const SingleProduct = () => {
   };
 
   // console.log(product);
-  
+
   useEffect(() => {
     fetchProduct();
   }, []);
@@ -56,8 +56,6 @@ const SingleProduct = () => {
     created_at,
   } = product;
 
-
-
   const cartProduct = {
     images,
     product_name,
@@ -65,11 +63,11 @@ const SingleProduct = () => {
     price,
     farmer_id,
     quantity: 1,
-    total:price
-  }
+    total: price,
+  };
 
   function addToCart() {
-    dispatch(addItemToCart({product:cartProduct}))
+    dispatch(addItemToCart({ product: cartProduct }));
   }
 
   // Handle next and previous image in the slider
@@ -105,9 +103,8 @@ const SingleProduct = () => {
               <img
                 src={images[currentImageIndex]}
                 alt={`Product image ${currentImageIndex + 1}`}
-                className="h-[23rem] w-[38rem] rounded-xl"
+                className="h-[18rem] object-cover lg:h-[23rem] w-[38rem] rounded-xl"
               />
-
               {/* Slider Buttons */}
               <button
                 className="absolute left-0 top-1/2 transform -translate-y-1/2 text-[1.5rem] font-bold bg-primary h-[3rem] w-[3rem] flex items-center justify-center  text-white p-2 rounded-full"
@@ -163,7 +160,10 @@ const SingleProduct = () => {
             <button className="btn btn-primary text-white rounded-full  md:text-2xl md:btn-lg">
               order now
             </button>
-            <button className="md:text-2xl btn btn-transparent text-[#1E1E1ECC] rounded-full md:btn-lg " onClick={addToCart}>
+            <button
+              className="md:text-2xl btn btn-transparent text-[#1E1E1ECC] rounded-full md:btn-lg "
+              onClick={addToCart}
+            >
               Add to cart
             </button>
           </div>
