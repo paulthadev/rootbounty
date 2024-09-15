@@ -7,12 +7,12 @@ const ProductCard = ({ product, onIncrement, onDecrement, onRemove }) => {
   return (
     <div className="bg-white p-4 rounded-lg shadow-md">
       <img
-        src={product.image}
-        alt={product.productName}
+        src={product?.images?.[0]}
+        alt={product.product_name}
         className="w-full h-48 object-cover rounded-lg"
       />
       <div className="mt-4">
-        <h2 className="text-lg capitalize font-bold">{product.productName}</h2>
+        <h2 className="text-lg capitalize font-bold">{product.product_name}</h2>
         <p>
           Price: <b>{formatPrice(product.price)}</b>
         </p>

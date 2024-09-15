@@ -5,12 +5,15 @@ import toast from "react-hot-toast";
 import { formatDate } from "../../utils/formatDate";
 import { MdKeyboardArrowLeft } from "react-icons/md";
 import { MdKeyboardArrowRight } from "react-icons/md";
+import { addItemToCart } from "../../features/cartSlice"; 
+import { useDispatch } from "react-redux";
 
 const SingleProduct = () => {
   const [product, setProduct] = useState([]);
   const [loading, setLoading] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0); // Slider state
   const { productId } = useParams();
+  const dispatch = useDispatch()
 
   const fetchProduct = async () => {
     try {
@@ -32,22 +35,42 @@ const SingleProduct = () => {
     }
   };
 
+  // console.log(product);
+  
   useEffect(() => {
     fetchProduct();
   }, []);
 
   const {
     business_name,
+    product_id,
     location,
     description,
     cultural,
     product_name,
+    farmer_id,
     tuber_type,
     nutrition,
     price,
     images = [], // Set a default empty array to avoid undefined
     created_at,
   } = product;
+
+
+
+  const cartProduct = {
+    images,
+    product_name,
+    product_id,
+    price,
+    farmer_id,
+    quantity: 1,
+    total:price
+  }
+
+  function addToCart() {
+    dispatch(addItemToCart({product:cartProduct}))
+  }
 
   // Handle next and previous image in the slider
   const handleNextImage = () => {
@@ -140,7 +163,7 @@ const SingleProduct = () => {
             <button className="btn btn-primary text-white rounded-full  md:text-2xl md:btn-lg">
               order now
             </button>
-            <button className="md:text-2xl btn btn-transparent text-[#1E1E1ECC] rounded-full md:btn-lg ">
+            <button className="md:text-2xl btn btn-transparent text-[#1E1E1ECC] rounded-full md:btn-lg " onClick={addToCart}>
               Add to cart
             </button>
           </div>

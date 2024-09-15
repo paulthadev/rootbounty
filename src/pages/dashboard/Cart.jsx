@@ -8,14 +8,14 @@ import {
 import ProductCard from "../../components/dashboard/ProductCard";
 
 const Cart = () => {
-  const products = useSelector((state) => state.cart.products);
+  // const products = useSelector((state) => state.cart.products);
+  const {cart}= useSelector((state)=>state.cart)
   const dispatch = useDispatch();
 
-  console.log(products);
 
   // In calculateTotalPrice
   const calculateTotalPrice = () => {
-    const total = products.reduce(
+    const total = cart.reduce(
       (total, product) => total.plus(new Decimal(product.total)),
       new Decimal(0)
     );
@@ -23,9 +23,11 @@ const Cart = () => {
   };
 
   const calculateTotalItems = () => {
-    return products.reduce((total, product) => total + product.quantity, 0);
+    return cart.reduce((total, product) => total + product.quantity, 0);
   };
-
+  if (cart == []){
+    <h2>ther is no item in the cart</h2>
+}
   return (
     <section className="py-10">
       <div className="flex justify-between items-center px-4 lg:px-0 mb-4">
@@ -35,13 +37,13 @@ const Cart = () => {
       <div className="grid grid-cols-1 lg:grid-cols-6 gap-4 px-4 lg:px-0">
         <div className="col-span-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {products.map((product) => (
+            {cart.map((product) => (
               <ProductCard
-                key={product.id}
+                key={product?.product_id}
                 product={product}
-                onIncrement={() => dispatch(incrementQuantity(product.id))}
-                onDecrement={() => dispatch(decrementQuantity(product.id))}
-                onRemove={() => dispatch(removeProduct(product.id))}
+                onIncrement={() => dispatch(incrementQuantity(product.product_id))}
+                onDecrement={() => dispatch(decrementQuantity(product.product_id))}
+                onRemove={() => dispatch(removeProduct(product.product_id))}
               />
             ))}
           </div>
@@ -59,9 +61,9 @@ const Cart = () => {
               <p className="text-lg font-bold">₦{calculateTotalPrice()}</p>
             </div>
 
-            {/* <button className="btn-block  bg-green-500 hover:bg-green-800 text-white text-lg btn btn-primary btn-md my-4 rounded-2xl">
+            <button className="btn-block  bg-green-500 hover:bg-green-800 text-white text-lg btn btn-primary btn-md my-4 rounded-2xl">
               Checkout
-            </button> */}
+            </button>
           </div>
         </div>
       </div>

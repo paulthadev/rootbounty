@@ -1,51 +1,63 @@
 import { createSlice } from "@reduxjs/toolkit";
+import toast from "react-hot-toast";
 
-const initialState = {
-  products: [
-    {
-      id: 1,
-      image: "/potatoe.png",
-      productName: "Sweet Potatoe",
-      price: 1100.98,
-      quantity: 1,
-      total: 1100.98,
-    },
-    {
-      id: 2,
-      image: "/potatoe.png",
-      productName: "Irish Potatoe",
-      price: 1000,
-      quantity: 1,
-      total: 1000,
-    },
-  ],
+function getCartFromLocalStorage() {
+  return JSON.parse(localStorage.getItem("cart")) || [];
+}
+
+const defaultState = {
+  cart: [],
+  cartTotal: 0,
 };
 
 export const cartSlice = createSlice({
   name: "cart",
-  initialState,
+  initialState: getCartFromLocalStorage,
   reducers: {
+    addItemToCart: (state, { payload }) => {
+      const { product } = payload;
+      const item = state.cart.find((item) => {
+        return item.product_id === product.product_id;
+      });
+
+      if (item) {
+        item.quantity += item.quantity;
+        toast.success("quantity increased");
+      } else {
+        state.cart.push(product);
+
+        toast.success("item added to cart");
+      }
+
+      localStorage.setItem("cart", JSON.stringify(state));
+      console.log(state.cart);
+    },
     incrementQuantity: (state, action) => {
-      const product = state.products.find((p) => p.id === action.payload);
+      const product = state.cart.find((p) => p.product_id === action.payload);
       if (product) {
         product.quantity += 1;
         product.total = product.quantity * product.price;
       }
     },
     decrementQuantity: (state, action) => {
-      const product = state.products.find((p) => p.id === action.payload);
+      const product = state.cart.find((p) => p.product_id === action.payload);
       if (product && product.quantity > 1) {
         product.quantity -= 1;
         product.total = product.quantity * product.price;
       }
     },
     removeProduct: (state, action) => {
-      state.products = state.products.filter((p) => p.id !== action.payload);
+      state.cart = state.cart.filter((p) => p.product_id !== action.payload);
+      localStorage.setItem("cart", JSON.stringify(state));
     },
   },
 });
 
-export const { incrementQuantity, decrementQuantity, removeProduct } =
-  cartSlice.actions;
+export const {
+  addItemToCart,
+  incrementQuantity,
+  decrementQuantity,
+  removeProduct,
+} = cartSlice.actions;
 
 export default cartSlice.reducer;
