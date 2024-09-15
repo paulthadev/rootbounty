@@ -36,6 +36,10 @@ export const farmerlinks = [
         title: "add product",
         link: "/farmer",
       },
+      {
+        title: "Product Lists",
+        link: "/productLists",
+      },
     ],
   },
   {

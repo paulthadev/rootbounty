@@ -28,17 +28,17 @@ const MobileSidebar = () => {
 
   return (
     <>
-      <section className="bg-[#4CAF50] z-20 h-screen fixed top-0 right-0 w-[40vw]">
+      <section className="bg-[#4CAF50] z-20 h-screen fixed top-0 right-0 w-[40vw] lg:hidden">
         <div>
           <div
-            className="absolute  right-[2rem] top-[2rem] text-2xl text-white"
+            className="absolute  right-[1.2rem] top-[1.2rem] text-2xl cursor-pointer text-white"
             onClick={() => dispatch(setOpenSidebar(false))}
           >
             <FaTimes />
           </div>
           <nav className="flex pt-[1.6rem] bg-[#4CAF50]">
             <Link to="/">
-              <span className="uppercase text-white font-bold text-[2.5rem] px-10">
+              <span className="uppercase text-white font-bold text-[2rem] px-5">
                 rb
               </span>
             </Link>

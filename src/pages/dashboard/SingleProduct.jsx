@@ -7,6 +7,9 @@ import { MdKeyboardArrowLeft } from "react-icons/md";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { addItemToCart } from "../../features/cartSlice";
 import { useDispatch } from "react-redux";
+import Spinner from "../../components/Spinner";
+import ProgressBar from "../../components/dashboard/ProgressBar";
+import KgSelector from "../../components/dashboard/KgSelector";
 
 const SingleProduct = () => {
   const [product, setProduct] = useState([]);
@@ -18,15 +21,12 @@ const SingleProduct = () => {
   const fetchProduct = async () => {
     try {
       setLoading(true);
-
       const { data, error } = await supabase
         .from("product")
         .select("*")
         .eq("product_id", productId)
         .single();
-
       if (error) throw error;
-
       setProduct(data);
       setLoading(false);
     } catch (error) {
@@ -34,8 +34,6 @@ const SingleProduct = () => {
       setLoading(false);
     }
   };
-
-  // console.log(product);
 
   useEffect(() => {
     fetchProduct();
@@ -49,10 +47,11 @@ const SingleProduct = () => {
     cultural,
     product_name,
     farmer_id,
-    tuber_type,
-    nutrition,
+    health,
+    nutrition, // This is where nutrition data comes in
     price,
-    images = [], // Set a default empty array to avoid undefined
+    kg, // This will display the kg
+    images = [],
     created_at,
   } = product;
 
@@ -83,20 +82,24 @@ const SingleProduct = () => {
     );
   };
 
+  if (loading) return <Spinner />;
+
   return (
     <section>
-      <div className="flex items-center gap-x-[5rem] lg:gap-x-[10rem]">
-        <div>
-          <h2 className="text-[#1E1E1E] text-lg font-bold capitalize">
-            {business_name}
-          </h2>
-          <p className="text-[#1E1E1E] text-sm">{location}</p>
-        </div>
-        <p className="text-sm text-[#1E1E1E]">{formatDate(created_at)}</p>
-      </div>
-
       <div className="grid md:grid-cols-2 mt-12 gap-8">
         <div>
+          <div className="flex items-center justify-between gap-x-[5rem] lg:gap-x-[10rem]">
+            <div>
+              <h2 className="text-[#1E1E1E] text-lg font-bold capitalize">
+                {business_name}
+              </h2>
+              <p className="text-[#1E1E1E] text-sm">{location}</p>
+            </div>
+            <p className="text-sm text-[#1E1E1E]">
+              {formatDate(created_at)} ago
+            </p>
+          </div>
+
           {/* Image Slider */}
           {images.length > 0 ? (
             <div className="relative">
@@ -105,7 +108,6 @@ const SingleProduct = () => {
                 alt={`Product image ${currentImageIndex + 1}`}
                 className="h-[18rem] object-cover lg:h-[23rem] w-[38rem] rounded-xl"
               />
-              {/* Slider Buttons */}
               <button
                 className="absolute left-0 top-1/2 transform -translate-y-1/2 text-[1.5rem] font-bold bg-primary h-[3rem] w-[3rem] flex items-center justify-center  text-white p-2 rounded-full"
                 onClick={handlePrevImage}
@@ -113,8 +115,7 @@ const SingleProduct = () => {
                 <MdKeyboardArrowLeft />
               </button>
               <button
-                className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-primary text-[1.5rem] font-bold h-[3rem] w-[3rem] flex justify-center items-center
-                 text-white p-2 rounded-full"
+                className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-primary text-[1.5rem] font-bold h-[3rem] w-[3rem] flex justify-center items-center text-white p-2 rounded-full"
                 onClick={handleNextImage}
               >
                 <MdKeyboardArrowRight />
@@ -127,41 +128,54 @@ const SingleProduct = () => {
           <h2 className="text-primary capitalize text-[1.5rem] font-bold mt-4">
             {product_name}
           </h2>
+
+          {/* Display Nutrition Values */}
           <div>
-            <h3 className="text-[#1E1E1E] font-bold text-[1.3rem] ">
+            <h3 className="text-[#1E1E1E] mt-8 font-bold text-[1.3rem]">
               Nutrition Value
             </h3>
+
+            {nutrition && (
+              <div className="mt-4">
+                {/* Display each nutritional value as a progress bar */}
+                <div>
+                  <ProgressBar name="Protein" percentage={75} />
+                  <ProgressBar name="Carbohydrate" percentage={70} />
+                  <ProgressBar name="Mineral" percentage={34} />
+                  <ProgressBar name="Vitamin" percentage={47} />
+                </div>
+              </div>
+            )}
+          </div>
+          {/* KG Selector */}
+          <div className="mt-8">
+            <h2 className="text-2xl font-bold mb-4">Number of KG</h2>
+            <KgSelector selectedKg={kg} />
           </div>
         </div>
 
-        <div>
-          <div className="border-b-[1px] pb-3">
+        <div className="md:mt-10">
+          <div className="border-b-[1px] pb-3 mb-4">
             <h3 className="text-primary text-[1.5rem] capitalize font-bold">
               description
             </h3>
             <p>{description}</p>
           </div>
-
-          <div className="border-b-[1px] pb-3">
+          <div className="border-b-[2px] pb-3 mb-4">
             <h3 className="text-primary text-[1.5rem] capitalize font-bold">
               health benefit
             </h3>
-            <p>{description}</p>
+            <p>{health || "information not provided"}</p>
           </div>
-
-          <div className="border-b-[1px] pb-3">
+          <div className="border-b-[1px] pb-3 mb-4">
             <h3 className="text-primary text-[1.5rem] capitalize font-bold">
               cultural relevance
             </h3>
             <p>{cultural}</p>
           </div>
-
           <div className="flex gap-3 mt-7">
-            <button className="btn btn-primary text-white rounded-full  md:text-2xl md:btn-lg">
-              order now
-            </button>
             <button
-              className="md:text-2xl btn btn-transparent text-[#1E1E1ECC] rounded-full md:btn-lg "
+              className="md:text-2xl btn btn-transparent text-[#1E1E1ECC] rounded-full md:btn-lg"
               onClick={addToCart}
             >
               Add to cart
