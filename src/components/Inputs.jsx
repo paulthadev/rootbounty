@@ -9,11 +9,15 @@ function Inputs({
   value,
   rows,
   label,
+  step,
+  min,
 }) {
   const inputProps = {
     type,
     name,
+    min,
     placeholder,
+    step,
     onChange,
     className: `registrationinput ${className} bg-white border outline-none focus:border-gray-400 input border-gray-400 w-full rounded-lg text-gray-900`,
     required: true,
