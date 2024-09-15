@@ -24,8 +24,8 @@ const Cart = () => {
   const calculateTotalItems = () => {
     return cart.reduce((total, product) => total + product.quantity, 0);
   };
+
   if (cart == []) {
-    
     return <h2>ther is no item in the cart</h2>;
   }
   return (
