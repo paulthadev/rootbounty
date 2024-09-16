@@ -35,7 +35,6 @@ const SingleProduct = () => {
     }
   };
 
-  // console.log(product);
 
   useEffect(() => {
     fetchProduct();
@@ -158,9 +157,6 @@ const SingleProduct = () => {
           </div>
 
           <div className="flex gap-3 mt-7">
-            {/* <button className="btn btn-primary text-white rounded-full  md:text-2xl md:btn-lg">
-              order now
-            </button> */}
             <button
               className="md:text-2xl btn btn-transparent text-[#1E1E1ECC] rounded-full md:btn-lg "
               onClick={addToCart}
