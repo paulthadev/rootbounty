@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import { supabase } from "../../utils/supabase";
 import ButtonSpinner from "../../components/ButtonSpinner";
 import { useNavigate } from "react-router";
+import { Link } from "react-router-dom";
 
 const SignUpBuyer = () => (
   <section className="relative flex flex-col">
@@ -37,11 +38,11 @@ const SignUpBuyer = () => (
 function Heading() {
   return (
     <div className="text-white w-full">
-      <h1 className="text-3xl font-bold max-w-sm mb-4">
+      <h1 className="text-3xl lg:text-5xl font-bold max-w-sm mb-4">
         Welcome, <br />
         Let&apos;s Get You Ready to Shop
       </h1>
-      <p className="text-xl leading-tight">
+      <p className="text-xl lg:text-2xl leading-tight">
         Join the platform and start purchasing fresh tuber crops directly from
         trusted farmers.
       </p>
@@ -164,6 +165,7 @@ function RegisterSection() {
         className="grid md:grid-cols-2 gap-2 lg:flex lg:flex-col"
       >
         <Inputs
+          label="First Name"
           type="text"
           placeholder="First Name"
           name="firstname"
@@ -172,6 +174,7 @@ function RegisterSection() {
         />
 
         <Inputs
+          label="Last Name"
           type="text"
           placeholder="Last Name"
           name="lastname"
@@ -180,6 +183,7 @@ function RegisterSection() {
         />
 
         <Inputs
+          label="Farm / Business Name"
           type="text"
           placeholder="Business Name/ Farm Name"
           name="businessName"
@@ -266,6 +270,7 @@ function RegisterSection() {
         </div>
 
         <Inputs
+          label="Farm Location / Farm Address"
           type="text"
           placeholder="Farm Location / Farm Address"
           name="location"
@@ -274,6 +279,7 @@ function RegisterSection() {
         />
 
         <Inputs
+          label="Email"
           type="email"
           placeholder="Email Address"
           name="email"
@@ -282,6 +288,7 @@ function RegisterSection() {
         />
 
         <Inputs
+          label="Phone Number"
           type="tel"
           placeholder="Phone Number"
           name="phone"
@@ -290,6 +297,7 @@ function RegisterSection() {
         />
 
         <Inputs
+          label="Password"
           type="password"
           placeholder="Password"
           name="password"
@@ -298,6 +306,7 @@ function RegisterSection() {
         />
 
         <Inputs
+          label="Confirm Password"
           type="password"
           placeholder="Confirm Password"
           name="confirmPassword"
@@ -312,6 +321,12 @@ function RegisterSection() {
           {isLoading ? <ButtonSpinner /> : "Create Farmer Account"}
         </button>
       </form>
+      <p className="text-center mt-2 text-sm sm:text-base text-wrap">
+        Already has an account? click here to{" "}
+        <Link to="/login">
+          <span className="font-bold">Sign In</span>
+        </Link>
+      </p>
     </div>
   );
 }
