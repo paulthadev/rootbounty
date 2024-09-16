@@ -8,6 +8,7 @@ import toast from "react-hot-toast";
 import { supabase } from "../../utils/supabase";
 import { useNavigate } from "react-router";
 import ButtonSpinner from "../../components/ButtonSpinner";
+import { Link } from "react-router-dom";
 
 const SignUpBuyer = () => (
   <section className="relative flex flex-col ">
@@ -131,7 +132,7 @@ function RegisterSection() {
   return (
     <div className="w-full bg-white p-8 md:p-12 ">
       <h1 className="text-black lg:text-3xl font-semibold pb-4 text-xl">
-        Create New Account
+        Create New Buyer Account
       </h1>
 
       <form
@@ -193,6 +194,14 @@ function RegisterSection() {
           {isLoading ? <ButtonSpinner /> : "Create Buyer Account"}
         </button>
       </form>
+      <div className="p-4 border-t">
+        <p className="text-center text-sm sm:text-base">
+          Already has an account? click here to{" "}
+          <Link to="/login">
+            <span className="font-bold">Sign In</span>
+          </Link>
+        </p>
+      </div>
     </div>
   );
 }
