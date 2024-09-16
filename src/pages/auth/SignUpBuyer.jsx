@@ -130,7 +130,7 @@ function RegisterSection() {
   };
 
   return (
-    <div className="w-full bg-white p-8 md:p-12 ">
+    <div className="w-full bg-white p-8  md:p-12 ">
       <h1 className="text-black lg:text-3xl font-semibold pb-4 text-xl">
         Create New Buyer Account
       </h1>
