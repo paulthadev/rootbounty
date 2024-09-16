@@ -135,21 +135,21 @@ const SingleProduct = () => {
         </div>
 
         <div>
-          <div className="border-b-[1px] pb-3">
+          <div className="border-b-[1px] pb-3 mb-4">
             <h3 className="text-primary text-[1.5rem] capitalize font-bold">
               description
             </h3>
             <p>{description}</p>
           </div>
 
-          <div className="border-b-[1px] pb-3">
+          <div className="border-b-[2px] pb-3 mb-4">
             <h3 className="text-primary text-[1.5rem] capitalize font-bold">
               health benefit
             </h3>
             <p>{description}</p>
           </div>
 
-          <div className="border-b-[1px] pb-3">
+          <div className="border-b-[1px] pb-3 mb-4">
             <h3 className="text-primary text-[1.5rem] capitalize font-bold">
               cultural relevance
             </h3>
@@ -157,9 +157,9 @@ const SingleProduct = () => {
           </div>
 
           <div className="flex gap-3 mt-7">
-            <button className="btn btn-primary text-white rounded-full  md:text-2xl md:btn-lg">
+            {/* <button className="btn btn-primary text-white rounded-full  md:text-2xl md:btn-lg">
               order now
-            </button>
+            </button> */}
             <button
               className="md:text-2xl btn btn-transparent text-[#1E1E1ECC] rounded-full md:btn-lg "
               onClick={addToCart}
