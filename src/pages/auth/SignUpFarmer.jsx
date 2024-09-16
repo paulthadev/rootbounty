@@ -155,12 +155,12 @@ function RegisterSection() {
   };
 
   return (
-    <div className="w-full bg-white mt-24 h-screen flex flex-col">
-      <h1 className="text-black lg:text-3xl font-semibold pb-4 text-xl">
-        Create New Account
-      </h1>
-
+    <div className="w-full bg-white mt-48 h-screen flex flex-col">
       <div className="p-8 md:p-12 flex-grow overflow-y-auto">
+        <h1 className="text-black lg:text-3xl font-semibold pb-4 text-xl">
+          Create New Farmer Account
+        </h1>
+
         <form
           onSubmit={handleSubmit}
           className="grid md:grid-cols-2 gap-2 lg:flex lg:flex-col"
