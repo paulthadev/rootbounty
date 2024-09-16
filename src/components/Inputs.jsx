@@ -25,7 +25,7 @@ function Inputs({
 
   return (
     <div className="p-2">
-      <label className="block font-medium text-sm md:text-lg lg:text-xl">
+      <label className="block font-medium  mb-1 text-sm md:text-lg lg:text-xl">
         {label}
       </label>
       {type === "textarea" ? (
