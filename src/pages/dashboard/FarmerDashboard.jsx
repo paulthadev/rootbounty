@@ -80,7 +80,6 @@ const FarmerDashboard = () => {
       serving_weight_grams: food.serving_weight_grams,
       serving_qty: food.serving_qty,
       calories: food.nf_calories,
-      cholesterol: food.nf_cholesterol,
       dietary_fiber: food.nf_dietary_fiber,
       protein: food.nf_protein,
       saturated_fat: food.nf_saturated_fat,
@@ -201,7 +200,7 @@ const FarmerDashboard = () => {
 
         {/* Tuber Type */}
         <div className="p-2 flex items-center flex-wrap gap-x-4 gap-y-2">
-          <label className="block font-medium text-sm md:text-lg lg:text-xl">
+          <label className="block font-medium  mb-1 text-sm md:text-lg lg:text-xl">
             Tuber type:
           </label>
           {userData?.tuber?.map((tuber) => (
@@ -274,7 +273,7 @@ const FarmerDashboard = () => {
 
         {/* File upload */}
         <div className="p-2">
-          <h2 className="block font-medium text-sm md:text-lg lg:text-xl">
+          <h2 className="block mb-1 font-medium text-sm md:text-lg lg:text-xl">
             Upload Images
           </h2>
           <input
@@ -289,7 +288,7 @@ const FarmerDashboard = () => {
 
         {/* Health benefits (optional) */}
         <div className="m-2">
-          <h2 className="block font-medium text-sm md:text-lg lg:text-xl">
+          <h2 className="block mb-1 font-medium text-sm md:text-lg lg:text-xl">
             Health Benefits{" "}
             <span className="text-gray-500 text-sm">(Optional)</span>
           </h2>
@@ -324,10 +323,6 @@ const FarmerDashboard = () => {
               <li>
                 <span className="font-semibold">Calories:</span>{" "}
                 {formData.nutritionalInfo[0].nf_calories} kcal
-              </li>
-              <li>
-                <span className="font-semibold">Cholesterol:</span>{" "}
-                {formData.nutritionalInfo[0].nf_cholesterol} mg
               </li>
               <li>
                 <span className="font-semibold">Dietary Fiber:</span>{" "}
