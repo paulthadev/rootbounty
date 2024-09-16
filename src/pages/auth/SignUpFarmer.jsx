@@ -155,7 +155,7 @@ function RegisterSection() {
   };
 
   return (
-    <div className="w-full bg-white p-8 md:p-12">
+    <div className="w-full bg-white h-screen p-8 md:p-12">
       <h1 className="text-black lg:text-3xl font-semibold pb-4 text-xl">
         Create New Account
       </h1>
@@ -321,7 +321,7 @@ function RegisterSection() {
           {isLoading ? <ButtonSpinner /> : "Create Farmer Account"}
         </button>
       </form>
-      <p className="text-center mt-2 text-sm sm:text-base text-wrap">
+      <p className="text-center pb-6 pt-3 text-sm sm:text-base text-wrap">
         Already has an account? click here to{" "}
         <Link to="/login">
           <span className="font-bold">Sign In</span>
