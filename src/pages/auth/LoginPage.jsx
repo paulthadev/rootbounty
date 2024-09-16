@@ -25,7 +25,7 @@ const LoginPage = () => (
       </div>
 
       {/* Content section with space for the header */}
-      <div className="absolute inset-0 flex lg:items-center  md:flex-row gap-y-10 flex-col justify-between pt-24 md:pt-0">
+      <div className="absolute inset-0 flex lg:items-center md:flex-row gap-y-10 flex-col justify-between pt-24 md:pt-0">
         <div className="flex md:w-1/2 flex-col items-center justify-center">
           <div className={`${styles.maxWidth}`}>
             <Heading />
