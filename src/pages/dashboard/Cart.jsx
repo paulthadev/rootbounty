@@ -25,8 +25,8 @@ const Cart = () => {
     return cart.reduce((total, product) => total + product.quantity, 0);
   };
 
-  if (cart == []) {
-    return <h2>ther is no item in the cart</h2>;
+  if (cart.length < 1) {
+    return <h2 className="text-2xl font-semibold">There is no item in the cart</h2>;
   }
   return (
     <section className="py-10">
