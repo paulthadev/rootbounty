@@ -50,6 +50,7 @@ const SingleProduct = () => {
     product_name,
     farmer_id,
     tuber_type,
+    health,
     nutrition,
     price,
     images = [], // Set a default empty array to avoid undefined
@@ -146,7 +147,7 @@ const SingleProduct = () => {
             <h3 className="text-primary text-[1.5rem] capitalize font-bold">
               health benefit
             </h3>
-            <p>{description}</p>
+            <p>{health}</p>
           </div>
 
           <div className="border-b-[1px] pb-3 mb-4">
