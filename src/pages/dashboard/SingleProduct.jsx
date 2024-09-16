@@ -147,7 +147,7 @@ const SingleProduct = () => {
             <h3 className="text-primary text-[1.5rem] capitalize font-bold">
               health benefit
             </h3>
-            <p>{health}</p>
+            <p>{health || 'information not provided'}</p>
           </div>
 
           <div className="border-b-[1px] pb-3 mb-4">
