@@ -18,7 +18,7 @@ const Cart = () => {
       (total, product) => total.plus(new Decimal(product.total)),
       new Decimal(0)
     );
-    return total.toFixed(2);
+    return total?.toFixed(2);
   };
 
   const calculateTotalItems = () => {
@@ -26,7 +26,9 @@ const Cart = () => {
   };
 
   if (cart.length < 1) {
-    return <h2 className="text-2xl font-semibold">There is no item in the cart</h2>;
+    return (
+      <h2 className="text-2xl font-semibold">There is no item in the cart</h2>
+    );
   }
   return (
     <section className="py-10">
