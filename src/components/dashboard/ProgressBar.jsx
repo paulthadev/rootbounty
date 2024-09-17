@@ -13,7 +13,7 @@ const ProgressBar = ({ name, percentage, unit }) => {
         </div>
         {/* Percentage display */}
         <span className="ml-4 font-bold">
-          {percentage.toFixed(2)}
+          {percentage?.toFixed(2)}
           {unit}
         </span>
       </div>
