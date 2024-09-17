@@ -151,21 +151,38 @@ const SingleProduct = () => {
               <div className="mt-1">
                 <ProgressBar
                   name="Calories"
-                  percentage={nutrition.calories / 2}
+                  percentage={nutrition.calories}
+                  unit="kcal"
                 />
-                <ProgressBar name="Sodium" percentage={nutrition.sodium / 2} />
-                <ProgressBar name="Sugars" percentage={nutrition.sugars / 2} />
+                <ProgressBar
+                  name="Sodium"
+                  percentage={nutrition.sodium}
+                  unit="mg"
+                />
+                <ProgressBar
+                  name="Sugars"
+                  percentage={nutrition.sugars}
+                  unit="g"
+                />
                 <ProgressBar
                   name="Protein"
-                  percentage={nutrition.protein / 2}
+                  percentage={nutrition.protein}
+                  unit="g"
                 />
                 <ProgressBar
                   name="Potassium"
-                  percentage={nutrition.potassium / 10}
+                  percentage={nutrition.potassium}
+                  unit="mg"
                 />
                 <ProgressBar
-                  name="Cholesterol"
-                  percentage={nutrition.cholesterol}
+                  name="Dietary Fiber"
+                  percentage={nutrition.dietary_fiber}
+                  unit="g"
+                />
+                <ProgressBar
+                  name="Total Fat"
+                  percentage={nutrition.total_fat}
+                  unit="g"
                 />
               </div>
             )}
