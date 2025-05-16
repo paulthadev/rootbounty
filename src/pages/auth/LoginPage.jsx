@@ -132,6 +132,15 @@ function RegisterSection() {
           onChange={handleChange}
         />
 
+        <div className="md:col-span-2 text-right mb-2">
+          <Link
+            to="/forgot-password"
+            className="text-green-600 hover:text-green-800 text-sm"
+          >
+            Forgot Password?
+          </Link>
+        </div>
+
         <button
           type="submit"
           className="md:col-span-2 bg-green-500 hover:bg-green-800 text-white py-3 rounded-lg text-lg"
