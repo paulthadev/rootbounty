@@ -16,6 +16,8 @@ import SingleProduct from "./pages/dashboard/SingleProduct";
 import BuyerProfile from "./pages/dashboard/BuyerProfile";
 import FarmerProfile from "./pages/dashboard/FarmerProfile";
 import ProductList from "./pages/dashboard/ProductList";
+import ForgotPassword from "./pages/auth/ForgotPassword";
+import ResetPassword from "./pages/auth/ResetPassword";
 
 const router = createBrowserRouter([
   {
@@ -53,6 +55,18 @@ const router = createBrowserRouter([
         <LoginPage />
       </AuthCheck>
     ),
+  },
+  {
+    path: "/forgot-password",
+    element: (
+      <AuthCheck>
+        <ForgotPassword />
+      </AuthCheck>
+    ),
+  },
+  {
+    path: "/reset-password",
+    element: <ResetPassword />,
   },
   {
     path: "/profile",
