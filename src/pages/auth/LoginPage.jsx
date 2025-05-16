@@ -10,6 +10,8 @@ import { supabase } from "../../utils/supabase";
 import { useNavigate } from "react-router";
 import ButtonSpinner from "../../components/ButtonSpinner";
 import { Link } from "react-router-dom";
+import { createUserProfileIfNeeded } from "../../utils/createUserProfile";
+import EmailVerificationNotice from "../../components/EmailVerificationNotice";
 
 const LoginPage = () => (
   <section className="relative flex flex-col ">
@@ -63,6 +65,7 @@ function RegisterSection() {
     email: "",
     password: "",
   });
+  const [unverifiedEmail, setUnverifiedEmail] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -83,7 +86,30 @@ function RegisterSection() {
         password: formData.password,
       });
 
-      if (error) throw error;
+      if (error) {
+        // Check if this is an "Email not confirmed" error
+        if (
+          error.message === "Email not confirmed" ||
+          (error.message.includes("email") && error.message.includes("confirm"))
+        ) {
+          // Handle unverified email case
+          setUnverifiedEmail(formData.email);
+          toast.error("Please verify your email before logging in");
+          setIsLoading(false);
+          return;
+        }
+        throw error;
+      }
+
+      // Email is verified if we get here
+      // Check if user needs profile creation (after email verification)
+      const profileResult = await createUserProfileIfNeeded();
+      if (!profileResult.success) {
+        console.warn(
+          "Profile check/creation encountered an issue:",
+          profileResult.error
+        );
+      }
 
       setFormData({ email: "", password: "" });
       toast.success("Login successful!");
@@ -93,10 +119,35 @@ function RegisterSection() {
       navigate("/profile");
     } catch (error) {
       console.log("Error logging in:", error.message);
-      toast.error(`Error logging in, ${error.message}`);
+      toast.error(`Error logging in: ${error.message}`);
       setIsLoading(false);
     }
   };
+
+  // Show email verification notice if login attempt was with unverified email
+  if (unverifiedEmail) {
+    return (
+      <div className="w-full bg-white p-8 md:p-12">
+        <div className="text-center mb-8">
+          <h1 className="text-2xl font-bold mb-2">Email Not Verified</h1>
+          <p className="text-gray-600">
+            Please verify your email address before logging in.
+          </p>
+        </div>
+
+        <EmailVerificationNotice email={unverifiedEmail} />
+
+        <div className="text-center mt-8">
+          <button
+            onClick={() => setUnverifiedEmail(null)}
+            className="bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 px-4 rounded-lg"
+          >
+            Back to Login
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full bg-white p-8 md:p-12 ">
