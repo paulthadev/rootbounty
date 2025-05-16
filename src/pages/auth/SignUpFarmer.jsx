@@ -8,6 +8,7 @@ import { supabase } from "../../utils/supabase";
 import ButtonSpinner from "../../components/ButtonSpinner";
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
+import EmailVerificationNotice from "../../components/EmailVerificationNotice";
 
 const SignUpBuyer = () => (
   <section className="relative flex flex-col min-h-screen">
@@ -49,6 +50,7 @@ function Heading() {
 function RegisterSection() {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const [registeredEmail, setRegisteredEmail] = useState(null);
   const [formData, setFormData] = useState({
     firstname: "",
     lastname: "",
@@ -95,11 +97,22 @@ function RegisterSection() {
     }
 
     try {
-      // Step 1: Register the user with Supabase Auth
-      // eslint-disable-next-line no-unused-vars
-      const { user, error: authError } = await supabase.auth.signUp({
+      // Register the user with Supabase Auth and store profile data in metadata
+      const { error: authError } = await supabase.auth.signUp({
         email: formData.email,
         password: formData.password,
+        options: {
+          data: {
+            firstname: formData.firstname,
+            lastname: formData.lastname,
+            phone: formData.phone,
+            business_name: formData.businessName,
+            location: formData.location,
+            tuber: formData.tuber,
+            user_type: "farmer",
+            pending_profile: true, // Flag to indicate profile needs to be created
+          },
+        },
       });
 
       if (authError) {
@@ -108,29 +121,9 @@ function RegisterSection() {
         return;
       }
 
-      // Step 2: Insert buyer/farmer data into the 'farmer' table
-      // eslint-disable-next-line no-unused-vars
-      const { data, error: insertError } = await supabase
-        .from("farmer")
-        .insert([
-          {
-            firstname: formData.firstname,
-            lastname: formData.lastname,
-            email: formData.email,
-            phone: formData.phone,
-            business_name: formData.businessName,
-            tuber: formData.tuber,
-            location: formData.location,
-          },
-        ]);
-
-      if (insertError) {
-        toast.error(`Profile creation failed: ${insertError.message}`);
-        setIsLoading(false);
-        return;
-      }
-
-      toast.success("Farmer Account created successfully!");
+      // Instead of inserting into the database now, we'll show the verification notice
+      toast.success("Registration successful! Please verify your email.");
+      setRegisteredEmail(formData.email);
       setFormData({
         firstname: "",
         lastname: "",
@@ -143,12 +136,37 @@ function RegisterSection() {
         location: "",
       });
       setIsLoading(false);
-      navigate("/login");
     } catch (error) {
       toast.error(`An unexpected error occurred: ${error.message}`);
       setIsLoading(false);
     }
   };
+
+  // If user just registered, show verification notice
+  if (registeredEmail) {
+    return (
+      <div className="w-full bg-white p-8 md:p-12">
+        <div className="text-center mb-8">
+          <h1 className="text-2xl font-bold mb-2">Account Created!</h1>
+          <p className="text-gray-600">
+            Your farmer account has been created successfully, but we need to
+            verify your email.
+          </p>
+        </div>
+
+        <EmailVerificationNotice email={registeredEmail} />
+
+        <div className="text-center mt-8">
+          <button
+            onClick={() => navigate("/login")}
+            className="bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 px-4 rounded-lg"
+          >
+            Go to Login
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full bg-white  h-screen flex flex-col">
