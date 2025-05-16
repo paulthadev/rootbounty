@@ -1,32 +1,67 @@
 /* eslint-disable react/prop-types */
+import { Navigate, useLocation } from "react-router-dom";
+import useCurrentUser from "../hooks/useCurrentUser";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router";
-import useCurrentUser from "../hooks/useCurrentUser"; // Assuming you have a hook to get user session
-import Spinner from "../components/Spinner";
+import EmailVerificationNotice from "../components/EmailVerificationNotice";
+import PendingProfileNotice from "../components/PendingProfileNotice";
 
 const ProtectedRoute = ({ children }) => {
-  const { user, loading } = useCurrentUser();
-  const navigate = useNavigate();
-  const [initialized, setInitialized] = useState(false);
+  const location = useLocation();
+  const { user, loading, isEmailVerified, pendingProfile, refreshUser } =
+    useCurrentUser();
+  const [showVerificationMessage, setShowVerificationMessage] = useState(false);
 
+  // Effect to periodically check if email has been verified
   useEffect(() => {
-    if (!loading) {
-      // Once loading is done, initialization is complete, regardless of user status
-      setInitialized(true);
+    if (user && !isEmailVerified) {
+      setShowVerificationMessage(true);
 
-      // If no user and initialization is done, redirect to login
-      if (!user) {
-        navigate("/login");
-      }
+      // Set up an interval to refresh the user data
+      const intervalId = setInterval(() => {
+        refreshUser();
+      }, 10000); // Check every 10 seconds
+
+      return () => clearInterval(intervalId);
+    } else {
+      setShowVerificationMessage(false);
     }
-  }, [user, loading, navigate]);
+  }, [user, isEmailVerified, refreshUser]);
 
-  if (loading || !initialized) {
-    // Show a loader while determining the user state
-    return <Spinner />;
+  if (loading) {
+    return (
+      <div className="h-screen flex justify-center items-center">
+        <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-green-500"></div>
+      </div>
+    );
   }
 
-  return user ? children : null; // Render children if the user exists
+  // If no user is logged in, redirect to login
+  if (!user) {
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  // User is logged in, but needs to verify their email
+  if (showVerificationMessage) {
+    return (
+      <>
+        <EmailVerificationNotice email={user.email} />
+        {children}
+      </>
+    );
+  }
+
+  // User is logged in but has a pending profile (needs DB record creation)
+  if (pendingProfile) {
+    return (
+      <>
+        <PendingProfileNotice />
+        {children}
+      </>
+    );
+  }
+
+  // User is logged in and verified
+  return children;
 };
 
 export default ProtectedRoute;
